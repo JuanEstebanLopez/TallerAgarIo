@@ -13,7 +13,7 @@ public class Modelo {
 	public static final String KEYSTORE_LOCATION = "agario.store";
 	public static final String KEYSTORE_PASSWORD = "redes2019";
 
-	public final static int PUERTO = 8080;
+	public final static int PUERTO = 8000;
 	public final static int CANT_JUGADORES = 5;
 	public final static String SALA_LLENA = "La sala está llena";
 	public boolean juegoIniciado;

@@ -26,6 +26,7 @@ public class Comunicacion extends Thread {
 		this.s = s;
 		this.principal = p;
 		this.nombre = "";
+		conectado = true;
 	}
 
 	@Override
@@ -33,13 +34,15 @@ public class Comunicacion extends Thread {
 		try {
 			sOut = new DataOutputStream(s.getOutputStream());
 			sIn = new DataInputStream(s.getInputStream());
+			conectado = true;
 			enviarMensaje("Bienvenido");
 			while (conectado) {
+				System.out.println("R_1");
 				recibirMensajes();
+				System.out.println("R_2");
 				sleep(SLEEP);
 			}
-			sOut.close();
-			sIn.close();
+			System.out.println("finalizar Servidor");
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 			principal.desconectarUsuario(this);
@@ -96,9 +99,9 @@ public class Comunicacion extends Thread {
 	 */
 	public void terminarConexion(String mensaje) {
 		try {
-			if(mensaje!= null && !"".equals(mensaje)) {
+			if (mensaje != null && !"".equals(mensaje)) {
 				enviarMensaje(INFO);
-				enviarMensaje(mensaje);	
+				enviarMensaje(mensaje);
 			}
 			enviarMensaje(DESCONECTAR);
 			conectado = false;

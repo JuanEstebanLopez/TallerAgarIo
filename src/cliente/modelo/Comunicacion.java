@@ -19,7 +19,7 @@ public class Comunicacion extends Thread {
 	public final static String DESCONECTAR = "exit";
 	public final static String INFO = "info";
 
-	public final static int PUERTO = 8080;
+	public final static int PUERTO = 8000;
 	public final static String IP_DEFAULT = "127.0.0.1";
 
 	private Socket s;
@@ -27,6 +27,7 @@ public class Comunicacion extends Thread {
 
 	private DataInputStream sIn;
 	private DataOutputStream sOut;
+
 	private String nombre;
 
 	private InterfazCliente interfaz;
@@ -48,9 +49,10 @@ public class Comunicacion extends Thread {
 			System.setProperty("javax.net.ssl.trustStore", TRUSTTORE_LOCATION);
 			SSLSocketFactory sf = (SSLSocketFactory) SSLSocketFactory.getDefault();
 			s = sf.createSocket(ip, PUERTO);
-			// s = new Socket(ip, PUERTO);
-			sOut = new DataOutputStream(s.getOutputStream());
-			sIn = new DataInputStream(s.getInputStream());
+			 sOut = new DataOutputStream(s.getOutputStream());
+			
+			 sIn = new DataInputStream(s.getInputStream());
+			
 			// Ciclo para obtener información desde el servidor
 			start();
 		} catch (IOException e) {
@@ -62,14 +64,15 @@ public class Comunicacion extends Thread {
 	public void run() {
 		try {
 			enviarMensaje(REGISTRAR);
-			System.out.println(nombre);
 			enviarMensaje(nombre);
+			System.out.println(nombre);
 			while (conectado) {
+				System.out.println("R1");
 				recibirMensajes();
+				System.out.println("R2");
 				sleep(SLEEP);
 			}
-			sOut.close();
-			sIn.close();
+			System.out.println("finalizar Cliente");
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -104,8 +107,8 @@ public class Comunicacion extends Thread {
 	 * @throws IOException
 	 */
 	public void enviarMensaje(String mensaje) throws IOException {
-		sOut.writeUTF(mensaje);
-		sOut.flush();
+		 sOut.writeUTF(mensaje);
+		 sOut.flush();
 	}
 
 	public void setNombre(String nombre) {
