@@ -1,4 +1,4 @@
-package comun.interfaz;
+package comun;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

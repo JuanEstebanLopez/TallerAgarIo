@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import cliente.modelo.Comunicacion;
-import comun.interfaz.PanelJuego;
+import comun.PanelJuego;
 
 public class InterfazCliente extends JFrame {
 

@@ -49,10 +49,10 @@ public class Comunicacion extends Thread {
 			System.setProperty("javax.net.ssl.trustStore", TRUSTTORE_LOCATION);
 			SSLSocketFactory sf = (SSLSocketFactory) SSLSocketFactory.getDefault();
 			s = sf.createSocket(ip, PUERTO);
-			 sOut = new DataOutputStream(s.getOutputStream());
-			
-			 sIn = new DataInputStream(s.getInputStream());
-			
+			sOut = new DataOutputStream(s.getOutputStream());
+
+			sIn = new DataInputStream(s.getInputStream());
+
 			// Ciclo para obtener información desde el servidor
 			start();
 		} catch (IOException e) {
@@ -67,9 +67,7 @@ public class Comunicacion extends Thread {
 			enviarMensaje(nombre);
 			System.out.println(nombre);
 			while (conectado) {
-				System.out.println("R1");
 				recibirMensajes();
-				System.out.println("R2");
 				sleep(SLEEP);
 			}
 			System.out.println("finalizar Cliente");
@@ -107,8 +105,8 @@ public class Comunicacion extends Thread {
 	 * @throws IOException
 	 */
 	public void enviarMensaje(String mensaje) throws IOException {
-		 sOut.writeUTF(mensaje);
-		 sOut.flush();
+		sOut.writeUTF(mensaje);
+		sOut.flush();
 	}
 
 	public void setNombre(String nombre) {

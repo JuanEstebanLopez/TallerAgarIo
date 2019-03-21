@@ -22,6 +22,8 @@ public class Comunicacion extends Thread {
 	private DataOutputStream sOut;
 	private String nombre;
 
+	
+	
 	public Comunicacion(Socket s, Modelo p) {
 		this.s = s;
 		this.principal = p;
@@ -35,11 +37,8 @@ public class Comunicacion extends Thread {
 			sOut = new DataOutputStream(s.getOutputStream());
 			sIn = new DataInputStream(s.getInputStream());
 			conectado = true;
-			enviarMensaje("Bienvenido");
 			while (conectado) {
-				System.out.println("R_1");
 				recibirMensajes();
-				System.out.println("R_2");
 				sleep(SLEEP);
 			}
 			System.out.println("finalizar Servidor");

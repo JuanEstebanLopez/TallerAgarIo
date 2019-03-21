@@ -1,4 +1,4 @@
-package comun.interfaz;
+package comun;
 
 public class Jugador extends Elemento {
 	public final static int BASE_DIAMETER = 100;

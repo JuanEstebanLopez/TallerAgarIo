@@ -2,7 +2,7 @@ package servidor;
 
 import javax.swing.JFrame;
 
-import comun.interfaz.PanelJuego;
+import comun.PanelJuego;
 import servidor.modelo.Modelo;
 
 public class InterfazServidor extends JFrame {
