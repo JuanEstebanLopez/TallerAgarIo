@@ -16,10 +16,10 @@ public class Jugador extends Elemento {
 	}
 
 	public void move(float direx, float direy) {
-		if (!(direx > 0 && x >= PanelJuego.WIDTH) && !(direx < 0 && x <= 0))
+		if (!(direx > 0 && x >= PanelJuego.WIDTH - d) && !(direx < 0 && x <= 0))
 			x += direx / BASE_VEL;
 
-		if (!(direy > 0 && y >= PanelJuego.HEIGHT) && !(direy < 0 && y <= 0))
+		if (!(direy > 0 && y >= PanelJuego.HEIGHT - d) && !(direy < 0 && y <= 0))
 			y += direy / BASE_VEL;
 	}
 

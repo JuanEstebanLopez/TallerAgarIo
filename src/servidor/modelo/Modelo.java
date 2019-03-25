@@ -56,13 +56,23 @@ public class Modelo {
 		}.start();
 	}
 
-	public void ActualizarClientes() {
-		String[] pos = principal.getListaPosiciones();
+	public void ActualizarClientes(String jugadores, String comida) {
+
 		for (Comunicacion comu : clientes) {
 			if (comu.isConectado()) {
-				comu.actualizarPosiciones(pos[0], pos[1]);
+				comu.actualizarPosiciones(jugadores, comida);
 			}
 		}
+	}
+
+	public boolean IniciarJuego() {
+		boolean enviadoATodos = true;
+		for (Comunicacion comu : clientes) {
+			if (comu.isConectado()) {
+				enviadoATodos &= comu.tryEnviarMensaje(Comunicacion.START);
+			}
+		}
+		return enviadoATodos;
 	}
 
 	public void agregarCliente(Comunicacion cliente) {
@@ -71,7 +81,7 @@ public class Modelo {
 			Jugador juga = new Jugador();
 			cliente.setJuga(juga);
 			int jIndex = principal.agregarJugador(juga);
-			cliente.tryEnviarMensaje(Comunicacion.REGISTRAR, jIndex+"");
+			cliente.tryEnviarMensaje(Comunicacion.REGISTRAR, jIndex + "");
 			System.out.println("Se ha agregado el jugador " + cliente.getNombre());
 		} else
 			cliente.terminarConexion(SALA_LLENA);

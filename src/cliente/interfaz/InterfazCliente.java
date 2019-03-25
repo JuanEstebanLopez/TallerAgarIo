@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import cliente.modelo.Comunicacion;
-import comun.PanelJuego;
 
 public class InterfazCliente extends JFrame {
 
@@ -35,6 +34,9 @@ public class InterfazCliente extends JFrame {
 	public InterfazCliente() {
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
+		juego = new JuegoCliente(this);
+		add(juego, BorderLayout.CENTER);
 
 		JPanel panelOpciones = new JPanel();
 		panelOpciones.setLayout(new GridLayout(1, 3));
@@ -94,9 +96,10 @@ public class InterfazCliente extends JFrame {
 
 	public void Conectar() {
 		comumincacion.crearComunicacion();
-		juego = new JuegoCliente(this);
-		add(juego, BorderLayout.CENTER);
-		pack();
+	}
+
+	public void iniciarJuego() {
+		juego.iniciarJuego();
 	}
 
 	public void actualizarPosiciones(int x, int y) {

@@ -30,7 +30,7 @@ public class JuegoCliente extends PanelJuego {
 			public void mouseMoved(MouseEvent e) {
 				mx = e.getX() - WIDTH / 2;
 				my = e.getY() - HEIGHT / 2;
-				//System.out.println(mx + ", " + my);
+				// System.out.println(mx + ", " + my);
 			}
 
 			@Override
@@ -82,8 +82,9 @@ public class JuegoCliente extends PanelJuego {
 		this.comida = comida;
 		if (jugadorIndex >= 0) {
 			String[] j = jugadores[jugadorIndex].split(Comunicacion.SEPARADOR_MIN);
-			playerX = WIDTH / 2 - Integer.parseInt(j[1]);
-			playerY = WIDTH / 2 - Integer.parseInt(j[2]);
+			int d = Integer.parseInt(j[3]);
+			playerX = WIDTH / 2 - Integer.parseInt(j[1]) - d / 2;
+			playerY = HEIGHT / 2 - Integer.parseInt(j[2]) - d / 2;
 		}
 	}
 

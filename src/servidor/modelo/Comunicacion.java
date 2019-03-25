@@ -15,6 +15,7 @@ public class Comunicacion extends Thread {
 	public final static String SEPARADOR_MIN = " ";
 
 	public final static String REGISTRAR = "register";
+	public final static String START = "start";
 	public final static String MOVER = "move";
 	public final static String DESCONECTAR = "exit";
 	public final static String INFO = "info";
@@ -94,19 +95,21 @@ public class Comunicacion extends Thread {
 	 * @throws IOException
 	 */
 	public void enviarMensaje(String... mensaje) throws IOException {
-		System.out.println("Se envía mensaje");
 		for (int i = 0; i < mensaje.length; i++) {
 			sOut.writeUTF(mensaje[i]);
 		}
 		sOut.flush();
 	}
 
-	public void tryEnviarMensaje(String... mensaje) {
+	public boolean tryEnviarMensaje(String... mensaje) {
+		boolean enviado = true;
 		try {
 			enviarMensaje(mensaje);
 		} catch (IOException e) {
 			e.printStackTrace();
+			enviado = false;
 		}
+		return enviado;
 	}
 
 	/**

@@ -18,6 +18,7 @@ public class Comunicacion extends Thread {
 	public final static String SEPARADOR_MIN = " ";
 
 	public final static String REGISTRAR = "register";
+	public final static String START = "start";
 	public final static String MOVER = "move";
 	public final static String DESCONECTAR = "exit";
 	public final static String INFO = "info";
@@ -69,7 +70,6 @@ public class Comunicacion extends Thread {
 			enviarMensaje(REGISTRAR, nombre);
 			System.out.println("Esperando mensajes...");
 			while (conectado) {
-				System.out.println("esperando");
 				recibirMensajes();
 				sleep(SLEEP);
 			}
@@ -90,11 +90,8 @@ public class Comunicacion extends Thread {
 		switch (mensaje) {
 		case MOVER:
 			String jugadores = nextLineServer();
-			System.out.println("Jugadores: " + jugadores);
 			String comida = nextLineServer();
-			System.out.println("Comida: " + comida);
 			interfaz.actualizarElementosJuego(jugadores, comida);
-			System.out.println(jugadores);
 			break;
 		case INFO:
 			mensaje = nextLineServer();
@@ -108,6 +105,9 @@ public class Comunicacion extends Thread {
 			int index = Integer.parseInt(nextLineServer());
 			interfaz.actualizarJugadorIndex(index);
 			System.out.println("Registrado como " + index);
+			break;
+		case START:
+			iniciarJuego();
 			break;
 
 		default:
@@ -138,6 +138,10 @@ public class Comunicacion extends Thread {
 			sOut.writeUTF(mensaje[i]);
 		}
 		sOut.flush();
+	}
+
+	public void iniciarJuego() {
+		interfaz.iniciarJuego();
 	}
 
 	public void moverJugador(int x, int y) {

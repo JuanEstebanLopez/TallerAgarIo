@@ -17,7 +17,7 @@ public class Elemento {
 	}
 
 	public byte collisionWhith(Elemento e) {
-		if (dist(e.x, e.y) < (d + e.d) / 2)
+		if (dist(e.getXR(), e.getYR()) < (d + e.d) / 2)
 			if (d > e.d)
 				return 1;
 			else
@@ -26,7 +26,7 @@ public class Elemento {
 	}
 
 	public int dist(float dx, float dy) {
-		return (int) Math.sqrt(Math.pow(x - dx, 2) + Math.pow(y - dy, 2));
+		return (int) Math.sqrt(Math.pow(getXR() - dx, 2) + Math.pow(getYR() - dy, 2));
 
 	}
 
@@ -48,6 +48,20 @@ public class Elemento {
 
 	public int getD() {
 		return (int) d;
+	}
+
+	/**
+	 * @return Coordenada x del centro el elemento
+	 */
+	public int getXR() {
+		return (int) (x + d / 2);
+	}
+
+	/**
+	 * @return Coordenada y del centro del elemento
+	 */
+	public int getYR() {
+		return (int) (y + d / 2);
 	}
 
 	public void setD(int d) {

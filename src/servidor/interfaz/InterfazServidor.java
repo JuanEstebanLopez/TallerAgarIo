@@ -1,5 +1,10 @@
 package servidor.interfaz;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import comun.Jugador;
@@ -20,8 +25,20 @@ public class InterfazServidor extends JFrame {
 
 	public InterfazServidor() {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		juego = new JuegoServidor();
-		add(juego);
+		setLayout(new BorderLayout());
+
+		juego = new JuegoServidor(this);
+		add(juego, BorderLayout.CENTER);
+		JButton btnIniciar = new JButton("Iniciar Juego");
+		btnIniciar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				iniciarPartida();
+
+			}
+		});
+		add(btnIniciar, BorderLayout.SOUTH);
 		pack();
 	}
 
@@ -40,8 +57,12 @@ public class InterfazServidor extends JFrame {
 		return juego.agregarJugador(juga);
 	}
 
-	public String[] getListaPosiciones() {
-		String[] l = { juego.listaJugadores(), juego.listaComida() };
-		return l;
+	public void actualizarPosiciones(String jugadores, String comida) {
+		modelo.ActualizarClientes(jugadores, comida);
+	}
+
+	public void iniciarPartida() {
+		modelo.IniciarJuego();
+		juego.iniciarJuego();
 	}
 }

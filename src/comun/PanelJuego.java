@@ -15,20 +15,16 @@ public abstract class PanelJuego extends JPanel implements Runnable {
 
 	public PanelJuego() {
 		JuegoActivo = true;
-
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
+	}
+
+	public void iniciarJuego() {
 		new Thread(this).start();
 	}
 
 	@Override
 	public void paint(Graphics g) {
 		super.paintComponent(g);
-		// g.drawOval((int) (Math.random() * WIDTH), (int) (Math.random() * HEIGHT),
-		// 200, 200);
-
-		// if (isCliente)
-		// g.drawOval(jugador.getX(), jugador.getY(), jugador.getD(), jugador.getD());
-
 		pintarComida(g);
 		pintarJugadores(g);
 	}
@@ -38,10 +34,6 @@ public abstract class PanelJuego extends JPanel implements Runnable {
 	public abstract void pintarJugadores(Graphics g);
 
 	public abstract void update();
-	// {
-	// if(isCliente)
-	// jugador.move(mx, my);
-	// }
 
 	@Override
 	public void run() {

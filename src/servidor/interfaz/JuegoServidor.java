@@ -18,9 +18,11 @@ public class JuegoServidor extends PanelJuego {
 
 	private ArrayList<Jugador> jugadores;
 	private LinkedList<Elemento> comida;
+	private InterfazServidor principal;
 
-	public JuegoServidor() {
+	public JuegoServidor(InterfazServidor principal) {
 		super();
+		this.principal = principal;
 		jugadores = new ArrayList<Jugador>(Modelo.CANT_JUGADORES);
 		comida = new LinkedList<Elemento>();
 	}
@@ -71,7 +73,7 @@ public class JuegoServidor extends PanelJuego {
 				DescalificarJugador(j);
 		}
 		addComida();
-
+		actualizarPosiciones();
 	}
 
 	private void addComida() {
@@ -90,6 +92,10 @@ public class JuegoServidor extends PanelJuego {
 	public int agregarJugador(Jugador juga) {
 		jugadores.add(juga);
 		return jugadores.size() - 1;
+	}
+
+	public void actualizarPosiciones() {
+		principal.actualizarPosiciones(listaJugadores(), listaComida());
 	}
 
 	public String listaJugadores() {
