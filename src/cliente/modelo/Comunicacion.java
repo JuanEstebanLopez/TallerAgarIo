@@ -8,11 +8,14 @@ import java.net.Socket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.swing.JOptionPane;
 
-import cliente.InterfazCliente;
+import cliente.interfaz.InterfazCliente;
 
 public class Comunicacion extends Thread {
 	public static final String TRUSTTORE_LOCATION = "agario.store";
 	public final static int SLEEP = 40;
+
+	public final static String SEPARADOR = ":";
+	public final static String SEPARADOR_MIN = " ";
 
 	public final static String REGISTRAR = "register";
 	public final static String MOVER = "move";
@@ -29,7 +32,6 @@ public class Comunicacion extends Thread {
 	private DataOutputStream sOut;
 
 	private String nombre;
-
 	private InterfazCliente interfaz;
 
 	public Comunicacion(InterfazCliente interfaz) {
@@ -63,10 +65,11 @@ public class Comunicacion extends Thread {
 	@Override
 	public void run() {
 		try {
-			enviarMensaje(REGISTRAR);
-			enviarMensaje(nombre);
-			System.out.println(nombre);
+			conectado = true;
+			enviarMensaje(REGISTRAR, nombre);
+			System.out.println("Esperando mensajes...");
 			while (conectado) {
+				System.out.println("esperando");
 				recibirMensajes();
 				sleep(SLEEP);
 			}
@@ -83,7 +86,33 @@ public class Comunicacion extends Thread {
 	 */
 	public void recibirMensajes() throws IOException {
 		String mensaje = nextLineServer();
-		System.out.println(mensaje);
+		System.out.println("Recibido: " + mensaje);
+		switch (mensaje) {
+		case MOVER:
+			String jugadores = nextLineServer();
+			System.out.println("Jugadores: " + jugadores);
+			String comida = nextLineServer();
+			System.out.println("Comida: " + comida);
+			interfaz.actualizarElementosJuego(jugadores, comida);
+			System.out.println(jugadores);
+			break;
+		case INFO:
+			mensaje = nextLineServer();
+			JOptionPane.showMessageDialog(interfaz, mensaje);
+			break;
+		case DESCONECTAR:
+			this.conectado = false;
+			System.out.println("Se ha deconectado del servidor.");
+			break;
+		case REGISTRAR:
+			int index = Integer.parseInt(nextLineServer());
+			interfaz.actualizarJugadorIndex(index);
+			System.out.println("Registrado como " + index);
+			break;
+
+		default:
+			break;
+		}
 
 	}
 
@@ -104,9 +133,21 @@ public class Comunicacion extends Thread {
 	 *            mensaje a enviar
 	 * @throws IOException
 	 */
-	public void enviarMensaje(String mensaje) throws IOException {
-		sOut.writeUTF(mensaje);
+	public void enviarMensaje(String... mensaje) throws IOException {
+		for (int i = 0; i < mensaje.length; i++) {
+			sOut.writeUTF(mensaje[i]);
+		}
 		sOut.flush();
+	}
+
+	public void moverJugador(int x, int y) {
+		try {
+			enviarMensaje(MOVER, x + SEPARADOR_MIN + y);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public void setNombre(String nombre) {
@@ -116,5 +157,4 @@ public class Comunicacion extends Thread {
 	public String getNombre() {
 		return nombre;
 	}
-
 }

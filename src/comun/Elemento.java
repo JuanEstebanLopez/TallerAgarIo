@@ -2,14 +2,18 @@ package comun;
 
 public class Elemento {
 	public final static int BASE_DIAMETER = 100;
-
+	public final static int COMIDA_DIAMETER = 20;
 	protected float x, y, d;
 	protected Color c;
 
 	public Elemento() {
-		d = BASE_DIAMETER;
-		x = (float) (Math.random() * PanelJuego.WIDTH - d) + d / 2;
-		y = (float) (Math.random() * PanelJuego.HEIGHT - d) + d / 2;
+		this(BASE_DIAMETER);
+	}
+
+	public Elemento(int d) {
+		this.d = d;
+		this.x = (float) (Math.random() * (PanelJuego.WIDTH - d)) + d / 2;
+		this.y = (float) (Math.random() * (PanelJuego.HEIGHT - d)) + d / 2;
 	}
 
 	public byte collisionWhith(Elemento e) {
@@ -27,7 +31,7 @@ public class Elemento {
 	}
 
 	public int getX() {
-		return (int) (x - d / 2);
+		return (int) (x);
 	}
 
 	public void setX(int x) {
@@ -35,7 +39,7 @@ public class Elemento {
 	}
 
 	public int getY() {
-		return (int) (y - d / 2);
+		return (int) (y);
 	}
 
 	public void setY(int y) {

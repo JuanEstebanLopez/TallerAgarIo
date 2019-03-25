@@ -1,17 +1,17 @@
-package servidor;
+package servidor.interfaz;
 
 import javax.swing.JFrame;
 
-import comun.PanelJuego;
+import comun.Jugador;
 import servidor.modelo.Modelo;
 
 public class InterfazServidor extends JFrame {
 
 	public static InterfazServidor REF;
-	
+
 	private Modelo modelo;
-	
-	
+	private JuegoServidor juego;
+
 	public static void main(String[] args) {
 		REF = new InterfazServidor();
 		REF.iniciar();
@@ -20,7 +20,8 @@ public class InterfazServidor extends JFrame {
 
 	public InterfazServidor() {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		add(new PanelJuego(false));
+		juego = new JuegoServidor();
+		add(juego);
 		pack();
 	}
 
@@ -32,7 +33,15 @@ public class InterfazServidor extends JFrame {
 	}
 
 	public void iniciar() {
-		modelo= new Modelo();
+		modelo = new Modelo(this);
 	}
 
+	public int agregarJugador(Jugador juga) {
+		return juego.agregarJugador(juga);
+	}
+
+	public String[] getListaPosiciones() {
+		String[] l = { juego.listaJugadores(), juego.listaComida() };
+		return l;
+	}
 }

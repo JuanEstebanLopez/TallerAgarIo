@@ -5,8 +5,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
+
+import comun.Jugador;
+import servidor.interfaz.InterfazServidor;
 
 public class Modelo {
 
@@ -19,7 +21,10 @@ public class Modelo {
 	public boolean juegoIniciado;
 	public ArrayList<Comunicacion> clientes;
 
-	public Modelo() {
+	public InterfazServidor principal;
+
+	public Modelo(InterfazServidor principal) {
+		this.principal = principal;
 		juegoIniciado = false;
 		clientes = new ArrayList<Comunicacion>(5);
 		aceptarClientes();
@@ -47,15 +52,28 @@ public class Modelo {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
 			}
 		}.start();
 	}
 
+	public void ActualizarClientes() {
+		String[] pos = principal.getListaPosiciones();
+		for (Comunicacion comu : clientes) {
+			if (comu.isConectado()) {
+				comu.actualizarPosiciones(pos[0], pos[1]);
+			}
+		}
+	}
+
 	public void agregarCliente(Comunicacion cliente) {
-		if (clientes.size() < CANT_JUGADORES)
+		if (clientes.size() < CANT_JUGADORES) {
 			clientes.add(cliente);
-		else
+			Jugador juga = new Jugador();
+			cliente.setJuga(juga);
+			int jIndex = principal.agregarJugador(juga);
+			cliente.tryEnviarMensaje(Comunicacion.REGISTRAR, jIndex+"");
+			System.out.println("Se ha agregado el jugador " + cliente.getNombre());
+		} else
 			cliente.terminarConexion(SALA_LLENA);
 	}
 

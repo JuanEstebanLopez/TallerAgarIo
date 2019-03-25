@@ -1,4 +1,4 @@
-package cliente;
+package cliente.interfaz;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -24,6 +24,8 @@ public class InterfazCliente extends JFrame {
 	private JButton btnIniciar;
 	private Comunicacion comumincacion;
 
+	private JuegoCliente juego;
+
 	public static void main(String[] args) {
 		REF = new InterfazCliente();
 		REF.iniciar();
@@ -33,7 +35,6 @@ public class InterfazCliente extends JFrame {
 	public InterfazCliente() {
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		add(new PanelJuego(true), BorderLayout.CENTER);
 
 		JPanel panelOpciones = new JPanel();
 		panelOpciones.setLayout(new GridLayout(1, 3));
@@ -42,12 +43,11 @@ public class InterfazCliente extends JFrame {
 
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				ActualizarNombre(txtNombre.getText());
 			}
 
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-
+				ActualizarNombre(txtNombre.getText());
 			}
 
 			@Override
@@ -60,6 +60,7 @@ public class InterfazCliente extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				ActualizarNombre(txtNombre.getText());
 				Conectar();
 
 			}
@@ -93,5 +94,20 @@ public class InterfazCliente extends JFrame {
 
 	public void Conectar() {
 		comumincacion.crearComunicacion();
+		juego = new JuegoCliente(this);
+		add(juego, BorderLayout.CENTER);
+		pack();
+	}
+
+	public void actualizarPosiciones(int x, int y) {
+		comumincacion.moverJugador(x, y);
+	}
+
+	public void actualizarJugadorIndex(int ind) {
+		juego.setJugadorIndex(ind);
+	}
+
+	public void actualizarElementosJuego(String jugadores, String comida) {
+		juego.actualizarElementosJuego(jugadores, comida);
 	}
 }

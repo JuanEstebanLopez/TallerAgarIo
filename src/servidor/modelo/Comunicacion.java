@@ -5,9 +5,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import comun.Jugador;
+
 public class Comunicacion extends Thread {
 
 	public final static int SLEEP = 40;
+
+	public final static String SEPARADOR = ":";
+	public final static String SEPARADOR_MIN = " ";
 
 	public final static String REGISTRAR = "register";
 	public final static String MOVER = "move";
@@ -22,8 +27,8 @@ public class Comunicacion extends Thread {
 	private DataOutputStream sOut;
 	private String nombre;
 
-	
-	
+	private Jugador juga;
+
 	public Comunicacion(Socket s, Modelo p) {
 		this.s = s;
 		this.principal = p;
@@ -55,8 +60,12 @@ public class Comunicacion extends Thread {
 	 */
 	public void recibirMensajes() throws IOException {
 		String mensaje = nextLineClient();
-		System.out.println(mensaje);
+		System.out.println("Recibido: " + mensaje);
 		switch (mensaje) {
+
+		case MOVER:
+			moverJugador(nextLineClient());
+			break;
 		case REGISTRAR:
 			setNombre(nextLineClient());
 			break;
@@ -81,12 +90,23 @@ public class Comunicacion extends Thread {
 	 * Envía un mensaje al cliente
 	 * 
 	 * @param mensaje
-	 *            mensaje a enviar
+	 *            mensajes a enviar
 	 * @throws IOException
 	 */
-	public void enviarMensaje(String mensaje) throws IOException {
-		sOut.writeUTF(mensaje);
+	public void enviarMensaje(String... mensaje) throws IOException {
+		System.out.println("Se envía mensaje");
+		for (int i = 0; i < mensaje.length; i++) {
+			sOut.writeUTF(mensaje[i]);
+		}
 		sOut.flush();
+	}
+
+	public void tryEnviarMensaje(String... mensaje) {
+		try {
+			enviarMensaje(mensaje);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -110,6 +130,19 @@ public class Comunicacion extends Thread {
 		}
 	}
 
+	public void moverJugador(String mov) {
+		String[] m = mov.split(SEPARADOR_MIN);
+		juga.move(Integer.parseInt(m[0]), Integer.parseInt(m[1]));
+	}
+
+	public void actualizarPosiciones(String jugadores, String comida) {
+		try {
+			enviarMensaje(MOVER, jugadores, comida);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 		principal.agregarCliente(this);
@@ -118,4 +151,21 @@ public class Comunicacion extends Thread {
 	public String getNombre() {
 		return nombre;
 	}
+
+	public void setJuga(Jugador juga) {
+		this.juga = juga;
+	}
+
+	public Jugador getJuga() {
+		return juga;
+	}
+
+	public boolean isConectado() {
+		return conectado;
+	}
+
+	public void setConectado(boolean conectado) {
+		this.conectado = conectado;
+	}
+
 }
