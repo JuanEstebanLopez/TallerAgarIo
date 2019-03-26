@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
 
 import comun.Jugador;
 import comun.PanelRanking;
@@ -26,9 +27,11 @@ public class InterfazServidor extends JFrame {
 	}
 
 	public InterfazServidor() {
+		setResizable(false);
+		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setTitle("Agario");
 		setLayout(new BorderLayout());
-
 		panelRanking = new PanelRanking();
 		juego = new JuegoServidor(this);
 		add(panelRanking, BorderLayout.EAST);
@@ -44,6 +47,12 @@ public class InterfazServidor extends JFrame {
 		});
 		add(btnIniciar, BorderLayout.SOUTH);
 		pack();
+		
+		try{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}catch(Exception e){	
+			
+		}
 	}
 
 	@Override
