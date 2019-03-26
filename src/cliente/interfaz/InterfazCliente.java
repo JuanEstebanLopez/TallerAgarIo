@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -118,7 +119,7 @@ public class InterfazCliente extends JFrame {
 	}
 	
 	public void registrarUsuario() {
-		
+		String nombre = JOptionPane.showInputDialog(this, "Digite el nombre de usuario");
 	}
 
 	@Override
