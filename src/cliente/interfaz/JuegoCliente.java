@@ -1,8 +1,10 @@
 package cliente.interfaz;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
 import cliente.modelo.Comunicacion;
 import comun.Elemento;
@@ -40,6 +42,20 @@ public class JuegoCliente extends PanelJuego {
 
 	}
 
+	public ArrayList<Color> colorear() {
+		ArrayList<Color> colores = new ArrayList();
+		colores.add(Color.BLUE);
+		colores.add(Color.RED);
+		colores.add(Color.CYAN);
+		colores.add(Color.YELLOW);
+		colores.add(Color.MAGENTA);
+		colores.add(Color.ORANGE);
+		colores.add(Color.PINK);
+		colores.add(Color.GREEN);
+		colores.add(Color.WHITE);
+		return colores;
+	}
+
 	@Override
 	public void pintarComida(Graphics g) {
 		if (!"".equals(comida)) {
@@ -49,7 +65,9 @@ public class JuegoCliente extends PanelJuego {
 				int color = Integer.parseInt(cInfo[0]);
 				int px = Integer.parseInt(cInfo[1]) + playerX;
 				int py = Integer.parseInt(cInfo[2]) + playerY;
-				g.drawOval(px, py, Elemento.COMIDA_DIAMETER, Elemento.COMIDA_DIAMETER);
+				g.setColor(colorear().get(color));
+				g.fillOval(px, py, Elemento.COMIDA_DIAMETER, Elemento.COMIDA_DIAMETER);
+
 			}
 		}
 	}
@@ -63,7 +81,8 @@ public class JuegoCliente extends PanelJuego {
 				int px = Integer.parseInt(jInfo[1]) + playerX;
 				int py = Integer.parseInt(jInfo[2]) + playerY;
 				int d = Integer.parseInt(jInfo[3]);
-				g.drawOval(px, py, d, d);
+				g.setColor(colorear().get(color));
+				g.fillOval(px, py, d, d);
 			}
 		}
 	}

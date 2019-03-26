@@ -4,7 +4,7 @@ public class Elemento {
 	public final static int BASE_DIAMETER = 100;
 	public final static int COMIDA_DIAMETER = 20;
 	protected float x, y, d;
-	protected Color c;
+	protected int c;
 
 	public Elemento() {
 		this(BASE_DIAMETER);
@@ -14,6 +14,7 @@ public class Elemento {
 		this.d = d;
 		this.x = (float) (Math.random() * (PanelJuego.WIDTH - d)) + d / 2;
 		this.y = (float) (Math.random() * (PanelJuego.HEIGHT - d)) + d / 2;
+		c = (int) (Math.random() * 9);
 	}
 
 	public byte collisionWhith(Elemento e) {
@@ -68,11 +69,11 @@ public class Elemento {
 		this.d = d;
 	}
 
-	public Color getC() {
+	public int getC() {
 		return c;
 	}
 
-	public void setC(Color c) {
+	public void setC(int c) {
 		this.c = c;
 	}
 

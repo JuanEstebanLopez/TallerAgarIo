@@ -12,7 +12,6 @@ public class Jugador extends Elemento {
 	public Jugador() {
 		super(BASE_DIAMETER);
 		activo = true;
-		puntaje = 0;
 	}
 
 	public void move(float direx, float direy) {
@@ -29,6 +28,10 @@ public class Jugador extends Elemento {
 
 	public boolean isActivo() {
 		return activo;
+	}
+
+	public int getPuntaje() {
+		return (int) ((d - BASE_DIAMETER) / INCREMENT);
 	}
 
 }

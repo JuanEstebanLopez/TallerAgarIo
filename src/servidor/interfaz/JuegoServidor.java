@@ -1,11 +1,13 @@
 package servidor.interfaz;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import cliente.modelo.Comunicacion;
+
 import comun.Elemento;
 import comun.Jugador;
 import comun.PanelJuego;
@@ -27,19 +29,37 @@ public class JuegoServidor extends PanelJuego {
 		comida = new LinkedList<Elemento>();
 	}
 
+	public ArrayList<Color> colorear() {
+		ArrayList<Color> colores = new ArrayList();
+		colores.add(Color.BLUE);
+		colores.add(Color.RED);
+		colores.add(Color.CYAN);
+		colores.add(Color.YELLOW);
+		colores.add(Color.MAGENTA);
+		colores.add(Color.ORANGE);
+		colores.add(Color.PINK);
+		colores.add(Color.GREEN);
+		colores.add(Color.WHITE);
+		return colores;
+	}
+
 	@Override
 	public void pintarComida(Graphics g) {
 		Iterator<Elemento> c = comida.iterator();
 		while (c.hasNext()) {
 			Elemento color = c.next();
-			g.drawOval(color.getX(), color.getY(), color.getD(), color.getD());
+			g.setColor(colorear().get(color.getC()));
+			g.fillOval(color.getX(), color.getY(), color.getD(), color.getD());
+
 		}
 	}
 
 	@Override
 	public void pintarJugadores(Graphics g) {
 		for (Jugador juga : jugadores) {
-			g.drawOval(juga.getX(), juga.getY(), juga.getD(), juga.getD());
+			int n = (int) Math.random() * 9;
+			g.setColor(colorear().get(n));
+			g.fillOval(juga.getX(), juga.getY(), juga.getD(), juga.getD());
 		}
 	}
 
@@ -101,13 +121,15 @@ public class JuegoServidor extends PanelJuego {
 	public String listaJugadores() {
 		StringBuilder str = new StringBuilder();
 		for (Jugador j : jugadores) {
-			str.append("1") // color
+			str.append(j.getC()) // color
 					.append(Comunicacion.SEPARADOR_MIN) // separador de atributo
 					.append(j.getX()) // Coordenada X
 					.append(Comunicacion.SEPARADOR_MIN) // separador de atributo
 					.append(j.getY()) // Coordenada Y
 					.append(Comunicacion.SEPARADOR_MIN) // separador de atributo
 					.append(j.getD()) // Diámetro
+					.append(Comunicacion.SEPARADOR) // separador de jugador
+					.append(j.getPuntaje()) // Diámetro
 					.append(Comunicacion.SEPARADOR); // separador de jugador
 		}
 		return str.toString();
@@ -116,7 +138,7 @@ public class JuegoServidor extends PanelJuego {
 	public String listaComida() {
 		StringBuilder str = new StringBuilder();
 		for (Elemento c : comida) {
-			str.append("1") // color
+			str.append(c.getC()) // color
 					.append(Comunicacion.SEPARADOR_MIN) // separador de atributo
 					.append(c.getX()) // Coordenada X
 					.append(Comunicacion.SEPARADOR_MIN) // separador de atributo
