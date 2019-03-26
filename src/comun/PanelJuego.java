@@ -12,14 +12,19 @@ public abstract class PanelJuego extends JPanel implements Runnable {
 	public final static int WIDTH = 1000;
 	public final static int HEIGHT = 600;
 	private boolean JuegoActivo;
-
+private Thread th;
 	public PanelJuego() {
 		JuegoActivo = true;
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 	}
 
-	public void iniciarJuego() {
-		new Thread(this).start();
+	public void IniciarJuego() {
+		th= new Thread();
+		th.start();
+	}
+
+	public void TerminarJuego() {
+		th.stop();
 	}
 
 	@Override

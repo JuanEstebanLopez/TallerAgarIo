@@ -79,6 +79,6 @@ public class InterfazServidor extends JFrame {
 
 	public void iniciarPartida() {
 		modelo.IniciarJuego();
-		juego.iniciarJuego();
+		juego.IniciarJuego();
 	}
 }

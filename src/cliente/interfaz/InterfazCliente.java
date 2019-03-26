@@ -163,7 +163,7 @@ public class InterfazCliente extends JFrame {
 	}
 
 	public void iniciarJuego() {
-		juego.iniciarJuego();
+		juego.IniciarJuego();
 	}
 
 	public void actualizarPosiciones(int x, int y) {
