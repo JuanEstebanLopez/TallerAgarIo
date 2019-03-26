@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import cliente.modelo.Comunicacion;
+import comun.PanelRanking;
 
 public class InterfazCliente extends JFrame {
 
@@ -22,6 +23,8 @@ public class InterfazCliente extends JFrame {
 	private JTextField txtNombre;
 	private JButton btnIniciar;
 	private Comunicacion comumincacion;
+	
+	private PanelRanking panelRanking;
 
 	private JuegoCliente juego;
 
@@ -35,8 +38,10 @@ public class InterfazCliente extends JFrame {
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
+		panelRanking = new PanelRanking();
 		juego = new JuegoCliente(this);
 		add(juego, BorderLayout.CENTER);
+		add(panelRanking, BorderLayout.EAST);
 
 		JPanel panelOpciones = new JPanel();
 		panelOpciones.setLayout(new GridLayout(1, 3));
