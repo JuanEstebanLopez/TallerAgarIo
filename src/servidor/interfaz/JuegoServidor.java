@@ -128,7 +128,7 @@ public class JuegoServidor extends PanelJuego {
 					.append(Comunicacion.SEPARADOR_MIN) // separador de atributo
 					.append(j.getD()) // Diámetro
 					.append(Comunicacion.SEPARADOR_MIN) // separador de jugador
-					.append(j.getPuntaje()) // Diámetro
+					.append(j.getPuntaje()) // Puntaje
 					.append(Comunicacion.SEPARADOR); // separador de jugador
 		}
 		return str.toString();
