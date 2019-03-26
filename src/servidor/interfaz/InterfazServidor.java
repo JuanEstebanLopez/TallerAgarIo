@@ -28,7 +28,6 @@ public class InterfazServidor extends JFrame {
 
 	public InterfazServidor() {
 		setResizable(false);
-		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("Agario");
 		setLayout(new BorderLayout());
@@ -53,6 +52,10 @@ public class InterfazServidor extends JFrame {
 		}catch(Exception e){	
 			
 		}
+	}
+	
+	public void refrecarRanking(String[] arreglo) {
+		
 	}
 
 	@Override
