@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
@@ -29,7 +30,7 @@ public class InterfazCliente extends JFrame {
 	private JLabel labNombre;
 	private JTextField txtNombre;
 	private JLabel labPassword;
-	private JTextField txtPassword;
+	private JPasswordField txtPassword;
 	private JButton btnIniciar;
 	private JButton btnRegistrar;
 	private Comunicacion comumincacion;
@@ -62,7 +63,7 @@ public class InterfazCliente extends JFrame {
 		labNombre = new JLabel("             Digite su Nickname: ");
 		txtNombre = new JTextField();
 		labPassword = new JLabel("                     Contraseña: ");
-		txtPassword = new JTextField();
+		txtPassword = new JPasswordField();
 		
 		txtNombre.addKeyListener(new KeyListener() {
 
@@ -119,12 +120,27 @@ public class InterfazCliente extends JFrame {
 	}
 	
 	public void registrarUsuario() {
-		String nombre = JOptionPane.showInputDialog(this, "Digite el nombre de usuario");
+		String nombre = "";
+		String email = "";
+		String password = "";
+		while(nombre.equals("")) {
+			nombre = JOptionPane.showInputDialog(this, "Digite el nombre de usuario");
+		}
+		if(!nombre.equals("")) {
+			while(email.equals("")) {
+				email = JOptionPane.showInputDialog(this, "Digite su e-mail");
+			}
+			if(!email.equals("")) {
+				while(password.equals("")) {
+					password = JOptionPane.showInputDialog(this, "Digite su contraseña");
+				}
+			}
+		}
 	}
 
 	@Override
 	public void dispose() {
-		System.out.println("Log Out");
+		JOptionPane.showMessageDialog(this, "Log Out");
 		super.dispose();
 		System.exit(EXIT_ON_CLOSE);
 	}
