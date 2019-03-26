@@ -57,8 +57,7 @@ public class JuegoServidor extends PanelJuego {
 	@Override
 	public void pintarJugadores(Graphics g) {
 		for (Jugador juga : jugadores) {
-			int n = (int) Math.random() * 9;
-			g.setColor(colorear().get(n));
+			g.setColor(colorear().get(juga.getC()));
 			g.fillOval(juga.getX(), juga.getY(), juga.getD(), juga.getD());
 		}
 	}
