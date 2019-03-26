@@ -31,6 +31,7 @@ public class InterfazServidor extends JFrame {
 
 		panelRanking = new PanelRanking();
 		juego = new JuegoServidor(this);
+		add(panelRanking, BorderLayout.EAST);
 		add(juego, BorderLayout.CENTER);
 		JButton btnIniciar = new JButton("Iniciar Juego");
 		btnIniciar.addActionListener(new ActionListener() {
