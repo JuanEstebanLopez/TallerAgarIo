@@ -54,7 +54,7 @@ public class InterfazServidor extends JFrame {
 		}
 	}
 	
-	public void refrecarRanking(String[] arreglo) {
+	public void refrecarRanking() {
 		
 	}
 
