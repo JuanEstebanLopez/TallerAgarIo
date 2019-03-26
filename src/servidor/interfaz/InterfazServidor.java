@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import comun.Jugador;
+import comun.PanelRanking;
 import servidor.modelo.Modelo;
 
 public class InterfazServidor extends JFrame {
@@ -16,6 +17,7 @@ public class InterfazServidor extends JFrame {
 
 	private Modelo modelo;
 	private JuegoServidor juego;
+	private PanelRanking panelRanking;
 
 	public static void main(String[] args) {
 		REF = new InterfazServidor();
@@ -27,6 +29,7 @@ public class InterfazServidor extends JFrame {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLayout(new BorderLayout());
 
+		panelRanking = new PanelRanking();
 		juego = new JuegoServidor(this);
 		add(juego, BorderLayout.CENTER);
 		JButton btnIniciar = new JButton("Iniciar Juego");
