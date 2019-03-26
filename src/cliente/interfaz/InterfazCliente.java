@@ -101,7 +101,6 @@ public class InterfazCliente extends JFrame {
 			}
 		});
 		
-		
 		panelOpciones.add(labNombre);
 		panelOpciones.add(txtNombre);
 		panelOpciones.add(labPassword);
@@ -134,6 +133,7 @@ public class InterfazCliente extends JFrame {
 				while(password.equals("")) {
 					password = JOptionPane.showInputDialog(this, "Digite su contraseña");
 				}
+				JOptionPane.showMessageDialog(this, "¡Usuario creado!");
 			}
 		}
 	}

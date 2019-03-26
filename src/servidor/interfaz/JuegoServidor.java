@@ -30,7 +30,7 @@ public class JuegoServidor extends PanelJuego {
 	}
 
 	public ArrayList<Color> colorear() {
-		ArrayList<Color> colores = new ArrayList();
+		ArrayList<Color> colores = new ArrayList<Color>();
 		colores.add(Color.BLUE);
 		colores.add(Color.RED);
 		colores.add(Color.CYAN);
