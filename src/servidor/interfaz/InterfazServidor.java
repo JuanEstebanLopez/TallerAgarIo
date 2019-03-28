@@ -3,13 +3,13 @@ package servidor.interfaz;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import comun.Jugador;
 import comun.PanelRanking;
+import comun.StopWatch;
 import servidor.modelo.Modelo;
 
 public class InterfazServidor extends JFrame {
@@ -19,6 +19,7 @@ public class InterfazServidor extends JFrame {
 	private Modelo modelo;
 	private JuegoServidor juego;
 	private PanelRanking panelRanking;
+	private StopWatch reloj;
 
 	public static void main(String[] args) {
 		REF = new InterfazServidor();
@@ -33,6 +34,7 @@ public class InterfazServidor extends JFrame {
 		setLayout(new BorderLayout());
 		panelRanking = new PanelRanking();
 		juego = new JuegoServidor(this);
+		reloj = new StopWatch();
 		add(panelRanking, BorderLayout.EAST);
 		add(juego, BorderLayout.CENTER);
 		JButton btnIniciar = new JButton("Iniciar Juego");
@@ -41,21 +43,30 @@ public class InterfazServidor extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				iniciarPartida();
-
+				reloj.start();
 			}
 		});
 		add(btnIniciar, BorderLayout.SOUTH);
 		pack();
-		
-		try{
+
+		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}catch(Exception e){	
-			
+		} catch (Exception e) {
+
 		}
+
 	}
-	
+
 	public void refrecarRanking() {
-		
+
+	}
+
+	public void TerminarPartida() {
+		System.out.println(reloj.getElapsedTimeSecs());
+		if (reloj.getElapsedTimeSecs() == 300) {
+			modelo.TerminarJuego(juego.TerminarJuego());
+
+		}
 	}
 
 	@Override
@@ -67,6 +78,7 @@ public class InterfazServidor extends JFrame {
 
 	public void iniciar() {
 		modelo = new Modelo(this);
+
 	}
 
 	public int agregarJugador(Jugador juga) {
