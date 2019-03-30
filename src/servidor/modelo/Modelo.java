@@ -97,7 +97,15 @@ public class Modelo {
 		}
 		return enviadoATodos;
 	}
-
+	public boolean TerminarJuego(String mensaje) {
+		boolean enviadoATodos = true;
+		for (Comunicacion comu : clientes) {
+			if (comu.isConectado()) {
+				enviadoATodos &= comu.tryEnviarMensaje(Comunicacion.DESCONECTAR, mensaje);
+			}
+		}
+		return enviadoATodos;
+	}
 	public void agregarCliente(Comunicacion cliente) {
 		if (clientes.size() < CANT_JUGADORES) {
 			clientes.add(cliente);

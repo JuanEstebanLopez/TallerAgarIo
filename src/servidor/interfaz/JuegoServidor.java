@@ -95,6 +95,15 @@ public class JuegoServidor extends PanelJuego {
 		actualizarPosiciones();
 	}
 
+	public String TerminarJuego() {
+		String puntajes = "";
+		for (int i = 0; i < jugadores.size(); i++) {
+			puntajes += jugadores.get(i).getPuntaje() + " ";
+		}
+		this.setJuegoActivo(false);
+		return puntajes;
+	}
+
 	private void addComida() {
 		if (comida.size() < MIN_COMIDA) {
 			int add = (MIN_COMIDA - comida.size()) + (int) (Math.random() * (float) (MAX_COMIDA - MIN_COMIDA));
