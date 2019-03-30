@@ -20,6 +20,8 @@ public class Modelo {
 	public final static String SALA_LLENA = "La sala está llena";
 	public boolean juegoIniciado;
 	public ArrayList<Comunicacion> clientes;
+	
+	private BaseDatos baseDatos;
 
 	public InterfazServidor principal;
 
@@ -27,8 +29,29 @@ public class Modelo {
 		this.principal = principal;
 		juegoIniciado = false;
 		clientes = new ArrayList<Comunicacion>(5);
+		baseDatos = new BaseDatos();
 		aceptarClientes();
 	}
+	
+	public boolean registrar(String nombre, String email, String password) {
+		return baseDatos.registrarUsuario(nombre, email, password);
+	}
+	
+//	public String refrescarRanking() {
+//		String rank = "";
+//		ArrayList jugadores = new ArrayList<>();
+//		for(int i = 0; i < clientes.size(); i++) {
+//			Comunicacion cliente = clientes.get(i);
+//			
+//			jugadores.add(cliente.getName()+cliente.getJuga().getPuntaje());
+//			Collections.sort(players, new Comparator<player>() {
+//				public int compare(playerball p1, playerball p2) {
+//					return p2.getmass - p1.getmass;
+//				}
+//			});
+//		}
+//		return rank;
+//	}
 
 	public void aceptarClientes() {
 		new Thread() {

@@ -55,6 +55,7 @@ public class InterfazServidor extends JFrame {
 	}
 	
 	public void refrecarRanking() {
+		//String ranking = modelo.refrescarRanking();
 		
 	}
 

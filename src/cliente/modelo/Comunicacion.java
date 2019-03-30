@@ -18,6 +18,8 @@ public class Comunicacion extends Thread {
 	public final static String SEPARADOR_MIN = " ";
 
 	public final static String REGISTRAR = "register";
+	public final static String REGISTO_FALLIDO = "register faild";
+
 	public final static String START = "start";
 	public final static String MOVER = "move";
 	public final static String DESCONECTAR = "exit";
@@ -67,7 +69,7 @@ public class Comunicacion extends Thread {
 	public void run() {
 		try {
 			conectado = true;
-			enviarMensaje(REGISTRAR, nombre);
+			//enviarMensaje(REGISTRAR, nombre);
 			System.out.println("Esperando mensajes...");
 			while (conectado) {
 				recibirMensajes();
@@ -106,6 +108,10 @@ public class Comunicacion extends Thread {
 			interfaz.actualizarJugadorIndex(index);
 			System.out.println("Registrado como " + index);
 			break;
+		case REGISTO_FALLIDO :
+			String mensaje2 = nextLineServer();
+			JOptionPane.showMessageDialog(null, mensaje2);
+			break;
 		case START:
 			iniciarJuego();
 			break;
@@ -129,15 +135,26 @@ public class Comunicacion extends Thread {
 	/**
 	 * Envía un mensaje al cliente
 	 * 
-	 * @param mensaje
-	 *            mensaje a enviar
+	 * @param mensaje mensaje a enviar
 	 * @throws IOException
 	 */
 	public void enviarMensaje(String... mensaje) throws IOException {
 		for (int i = 0; i < mensaje.length; i++) {
+			System.out.println(mensaje[i]+"__"+mensaje.length);
 			sOut.writeUTF(mensaje[i]);
 		}
 		sOut.flush();
+	}
+
+	public boolean tryEnviarMensaje(String... mensaje) {
+		boolean enviado = true;
+		try {
+			enviarMensaje(mensaje);
+		} catch (IOException e) {
+			e.printStackTrace();
+			enviado = false;
+		}
+		return enviado;
 	}
 
 	public void iniciarJuego() {

@@ -87,6 +87,7 @@ public class InterfazCliente extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				Conectar();
 				registrarUsuario();
 			}
 		});
@@ -95,8 +96,8 @@ public class InterfazCliente extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ActualizarNombre(txtNombre.getText());
-				Conectar();
+//				ActualizarNombre(txtNombre.getText());
+//				Conectar();
 
 			}
 		});
@@ -118,6 +119,11 @@ public class InterfazCliente extends JFrame {
 		}
 	}
 	
+	public void iniciarSesion() {
+		String nombre = txtNombre.getText();
+		char[] password = txtPassword.getPassword();
+	}
+	
 	public void registrarUsuario() {
 		String nombre = "";
 		String email = "";
@@ -133,7 +139,8 @@ public class InterfazCliente extends JFrame {
 				while(password.equals("")) {
 					password = JOptionPane.showInputDialog(this, "Digite su contraseña");
 				}
-				JOptionPane.showMessageDialog(this, "¡Usuario creado!");
+				System.out.println(Comunicacion.REGISTRAR+" "+nombre+" "+email+" "+password);
+				comumincacion.tryEnviarMensaje(Comunicacion.REGISTRAR, nombre, email, password);
 			}
 		}
 	}

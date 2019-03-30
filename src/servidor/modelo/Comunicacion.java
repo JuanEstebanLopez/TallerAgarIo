@@ -15,6 +15,7 @@ public class Comunicacion extends Thread {
 	public final static String SEPARADOR_MIN = " ";
 
 	public final static String REGISTRAR = "register";
+	public final static String REGISTO_FALLIDO = "register faild";
 	public final static String START = "start";
 	public final static String MOVER = "move";
 	public final static String DESCONECTAR = "exit";
@@ -68,7 +69,15 @@ public class Comunicacion extends Thread {
 			moverJugador(nextLineClient());
 			break;
 		case REGISTRAR:
-			setNombre(nextLineClient());
+			String nombre = nextLineClient();
+			String email = nextLineClient();
+			String password = nextLineClient();
+			
+			if(principal.registrar(nombre, email, password)) {
+				setNombre(nombre);
+			}else {
+				enviarMensaje(REGISTO_FALLIDO, "El usuario "+nombre+" ya está registrado");
+			}
 			break;
 
 		default:
@@ -90,8 +99,7 @@ public class Comunicacion extends Thread {
 	/**
 	 * Envía un mensaje al cliente
 	 * 
-	 * @param mensaje
-	 *            mensajes a enviar
+	 * @param mensaje mensajes a enviar
 	 * @throws IOException
 	 */
 	public void enviarMensaje(String... mensaje) throws IOException {
@@ -115,9 +123,8 @@ public class Comunicacion extends Thread {
 	/**
 	 * Termina la comunicación entre un usuario y el servidor.
 	 * 
-	 * @param mensaje
-	 *            Mensaje para mostrar al usuario que ha sido desconectado del
-	 *            servidor.
+	 * @param mensaje Mensaje para mostrar al usuario que ha sido desconectado del
+	 *                servidor.
 	 */
 	public void terminarConexion(String mensaje) {
 		try {
