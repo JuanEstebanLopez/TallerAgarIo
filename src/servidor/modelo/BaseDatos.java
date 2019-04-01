@@ -11,73 +11,94 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-public class BaseDatos {
-	
+public class BaseDatos implements Serializable {
+	public final static String BD = "bd/datos.txt";
 	private HashMap<String, UsuarioRegistrado> datos;
-	
+
 	public BaseDatos() {
-		datos = new HashMap<String, UsuarioRegistrado>();
+		leer();
 	}
-	
+
+	/**
+	 * Agrega un nuevo usuario.
+	 * 
+	 * @param usuario
+	 * @param password
+	 * @param email
+	 * @return true si el usuario se pudo registrar, false si el usuario existe o no
+	 *         se pudo guardar el archivo.
+	 */
 	public boolean registrarUsuario(String usuario, String password, String email) {
-		if(verificarUsuarioExistente(usuario)) {
+		if (verificarUsuarioExistente(email)) {
 			return false;
-		}else {
-			try {
-				ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("baseDatos/datos.txt", true));
-				UsuarioRegistrado registrado = new UsuarioRegistrado(usuario, email, password);
-				salida.writeObject(registrado);
-				salida.close();
-				return true;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return false;
+		} else {
+			UsuarioRegistrado registrado = new UsuarioRegistrado(usuario, email, password);
+			datos.put(email, registrado);
+			return guardar();
 		}
 	}
-	
+
 	/**
 	 * Verifica si un usuario existe.<br>
 	 * Se usa para saber si un usuario se puede registrar.
-	 * @param usuario
+	 * 
+	 * @param email
 	 * @return true si el usuario ya existe, false en caso contrario.
 	 */
-	public boolean verificarUsuarioExistente(String usuario) {
-		return datos.containsKey(usuario);
+	public boolean verificarUsuarioExistente(String email) {
+		return datos.containsKey(email);
 	}
-	
+
 	/**
 	 * Verifica si el usuario tiene su contraseña correcta.<br>
 	 * Se usa para verificar si un usuario puede iniciar sesión.
-	 * @param usuario
+	 * 
+	 * @param email
 	 * @param pass
 	 * @return true si el usuario es válido, false en caso contrario.
 	 */
-	public boolean verificarInicioSesion(String usuario, String pass) {
-		return datos.containsKey(usuario) && datos.get(usuario).getPassword().equals(pass);
+	public boolean verificarInicioSesion(String email, String pass) {
+		return datos.containsKey(email) && datos.get(email).getPassword().equals(pass);
 	}
-	
+
 	public void leer() {
 		try {
-			ObjectInputStream br = new ObjectInputStream(new FileInputStream("baseDatos/datos.txt"));
+			ObjectInputStream br = new ObjectInputStream(new FileInputStream(BD));
 			datos = (HashMap<String, UsuarioRegistrado>) br.readObject();
 			br.close();
 		} catch (FileNotFoundException e) {
+			datos = new HashMap<String, UsuarioRegistrado>();
+			guardar();
+			leer();
 			e.printStackTrace();
-		} catch(IOException s) {
+		} catch (IOException s) {
 			s.printStackTrace();
 		} catch (ClassNotFoundException m) {
 			m.printStackTrace();
 		}
+		System.out.println(datos);
 	}
-	
+
+	public boolean guardar() {
+		try {
+			System.out.println(datos);
+			ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(BD, false));
+			salida.writeObject(datos);
+			salida.flush();
+			salida.close();
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 	private class UsuarioRegistrado implements Serializable {
-		
+
 		private String nombre;
 		private String email;
 		private String password;
-		
+
 		public UsuarioRegistrado(String nombre, String email, String password) {
 			this.nombre = nombre;
 			this.email = email;
@@ -107,7 +128,7 @@ public class BaseDatos {
 		public void setPassword(String password) {
 			this.password = password;
 		}
-		
+
 	}
 
 }

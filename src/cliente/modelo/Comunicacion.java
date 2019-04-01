@@ -20,9 +20,13 @@ public class Comunicacion extends Thread {
 	public final static String REGISTRAR = "register";
 	public final static String REGISTO_FALLIDO = "register faild";
 
+	public final static String INICIAR_SESION = "login";
+	public final static String INICIO_SESION_FALLIDO = "login faild";
+
 	public final static String START = "start";
 	public final static String MOVER = "move";
 	public final static String DESCONECTAR = "exit";
+	public final static String FIN_PARTIDA = "fin";
 	public final static String INFO = "info";
 
 	public final static int PUERTO = 8000;
@@ -69,7 +73,7 @@ public class Comunicacion extends Thread {
 	public void run() {
 		try {
 			conectado = true;
-			//enviarMensaje(REGISTRAR, nombre);
+			// enviarMensaje(REGISTRAR, nombre);
 			System.out.println("Esperando mensajes...");
 			while (conectado) {
 				recibirMensajes();
@@ -101,19 +105,29 @@ public class Comunicacion extends Thread {
 			break;
 		case DESCONECTAR:
 			this.conectado = false;
+			interfaz.terminarJuego();
 			System.out.println("Se ha deconectado del servidor.");
+			break;
+		case FIN_PARTIDA:
+			this.conectado = false;
+			String puntajesFinales = nextLineServer();
+			interfaz.ActualizarPuntaje(puntajesFinales);
+			System.out.println("Se ha terminado el juego.\n Puntajes: " + puntajesFinales);
+			interfaz.terminarJuego();
 			break;
 		case REGISTRAR:
 			int index = Integer.parseInt(nextLineServer());
 			interfaz.actualizarJugadorIndex(index);
 			System.out.println("Registrado como " + index);
 			break;
-		case REGISTO_FALLIDO :
+		case REGISTO_FALLIDO:
+		case INICIO_SESION_FALLIDO:
 			String mensaje2 = nextLineServer();
 			JOptionPane.showMessageDialog(null, mensaje2);
 			break;
 		case START:
 			iniciarJuego();
+			String usuarios = nextLineServer();
 			break;
 
 		default:
@@ -135,12 +149,13 @@ public class Comunicacion extends Thread {
 	/**
 	 * Envía un mensaje al cliente
 	 * 
-	 * @param mensaje mensaje a enviar
+	 * @param mensaje
+	 *            mensaje a enviar
 	 * @throws IOException
 	 */
 	public void enviarMensaje(String... mensaje) throws IOException {
 		for (int i = 0; i < mensaje.length; i++) {
-			System.out.println(mensaje[i]+"__"+mensaje.length);
+			System.out.println(mensaje[i] + "__" + mensaje.length);
 			sOut.writeUTF(mensaje[i]);
 		}
 		sOut.flush();

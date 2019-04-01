@@ -12,7 +12,6 @@ public abstract class PanelJuego extends JPanel implements Runnable {
 	public final static int WIDTH = 1000;
 	public final static int HEIGHT = 600;
 
-
 	private boolean JuegoActivo;
 
 	public PanelJuego() {
@@ -24,9 +23,6 @@ public abstract class PanelJuego extends JPanel implements Runnable {
 		new Thread(this).start();
 
 	}
-
-
-	
 
 	@Override
 	public void paint(Graphics g) {
@@ -40,6 +36,7 @@ public abstract class PanelJuego extends JPanel implements Runnable {
 	public abstract void pintarJugadores(Graphics g);
 
 	public abstract void update();
+
 	public boolean isJuegoActivo() {
 		return JuegoActivo;
 	}
@@ -47,6 +44,7 @@ public abstract class PanelJuego extends JPanel implements Runnable {
 	public void setJuegoActivo(boolean juegoActivo) {
 		JuegoActivo = juegoActivo;
 	}
+
 	@Override
 	public void run() {
 		while (JuegoActivo) {

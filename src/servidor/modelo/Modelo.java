@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.net.ssl.SSLServerSocketFactory;
+import javax.swing.JOptionPane;
 
 import comun.Jugador;
 import servidor.interfaz.InterfazServidor;
@@ -18,9 +20,10 @@ public class Modelo {
 	public final static int PUERTO = 8000;
 	public final static int CANT_JUGADORES = 5;
 	public final static String SALA_LLENA = "La sala está llena";
+	public final static String JUEGO_INICIADO = "El juego ya ha iniciado";
 	public boolean juegoIniciado;
 	public ArrayList<Comunicacion> clientes;
-	
+
 	private BaseDatos baseDatos;
 
 	public InterfazServidor principal;
@@ -32,26 +35,30 @@ public class Modelo {
 		baseDatos = new BaseDatos();
 		aceptarClientes();
 	}
-	
+
 	public boolean registrar(String nombre, String email, String password) {
 		return baseDatos.registrarUsuario(nombre, email, password);
 	}
-	
-//	public String refrescarRanking() {
-//		String rank = "";
-//		ArrayList jugadores = new ArrayList<>();
-//		for(int i = 0; i < clientes.size(); i++) {
-//			Comunicacion cliente = clientes.get(i);
-//			
-//			jugadores.add(cliente.getName()+cliente.getJuga().getPuntaje());
-//			Collections.sort(players, new Comparator<player>() {
-//				public int compare(playerball p1, playerball p2) {
-//					return p2.getmass - p1.getmass;
-//				}
-//			});
-//		}
-//		return rank;
-//	}
+
+	public boolean iniciarSesion(String nombre, String password) {
+		return baseDatos.verificarInicioSesion(nombre, password);
+	}
+
+	// public String refrescarRanking() {
+	// String rank = "";
+	// ArrayList jugadores = new ArrayList<>();
+	// for(int i = 0; i < clientes.size(); i++) {
+	// Comunicacion cliente = clientes.get(i);
+	//
+	// jugadores.add(cliente.getName()+cliente.getJuga().getPuntaje());
+	// Collections.sort(players, new Comparator<player>() {
+	// public int compare(playerball p1, playerball p2) {
+	// return p2.getmass - p1.getmass;
+	// }
+	// });
+	// }
+	// return rank;
+	// }
 
 	public void aceptarClientes() {
 		new Thread() {
@@ -81,39 +88,54 @@ public class Modelo {
 
 	public void ActualizarClientes(String jugadores, String comida) {
 
-		for (Comunicacion comu : clientes) {
+		for (int i = clientes.size() - 1; i >= 0; i--) {
+			Comunicacion comu = clientes.get(i);
 			if (comu.isConectado()) {
-				comu.actualizarPosiciones(jugadores, comida);
+				if (comu.getJuga().isActivo())
+					comu.actualizarPosiciones(jugadores, comida);
+				else
+					comu.terminarConexion("Has sido descalificado, has quedado de puesto: " + clientes.size());
 			}
 		}
+
 	}
 
 	public boolean IniciarJuego() {
 		boolean enviadoATodos = true;
+		StringBuilder usuarios = new StringBuilder();
+		for (Comunicacion comu : clientes) {
+			usuarios.append(comu.getNombre()).append(Comunicacion.SEPARADOR_MIN);
+		}
+		String usrs = usuarios.toString();
 		for (Comunicacion comu : clientes) {
 			if (comu.isConectado()) {
-				enviadoATodos &= comu.tryEnviarMensaje(Comunicacion.START);
+				enviadoATodos &= comu.tryEnviarMensaje(Comunicacion.START, usrs);
 			}
 		}
 		return enviadoATodos;
 	}
-	public boolean TerminarJuego(String mensaje) {
-		boolean enviadoATodos = true;
-		for (Comunicacion comu : clientes) {
-			if (comu.isConectado()) {
-				enviadoATodos &= comu.tryEnviarMensaje(Comunicacion.DESCONECTAR, mensaje);
-			}
+
+	public void TerminarJuego(String mensaje) {
+		for (int i = clientes.size() - 1; i >= 0; i--) {
+			Comunicacion comu = clientes.get(i);
+			comu.partidaTerminada(mensaje);
+
 		}
-		return enviadoATodos;
 	}
+
 	public void agregarCliente(Comunicacion cliente) {
-		if (clientes.size() < CANT_JUGADORES) {
+		if (principal.juegoIniciado()) {
+			cliente.terminarConexion(JUEGO_INICIADO);
+		} else if (clientes.size() < CANT_JUGADORES) {
 			clientes.add(cliente);
 			Jugador juga = new Jugador();
 			cliente.setJuga(juga);
 			int jIndex = principal.agregarJugador(juga);
 			cliente.tryEnviarMensaje(Comunicacion.REGISTRAR, jIndex + "");
 			System.out.println("Se ha agregado el jugador " + cliente.getNombre());
+			if (clientes.size() >= 2) {
+				principal.puedeIniciar();
+			}
 		} else
 			cliente.terminarConexion(SALA_LLENA);
 	}

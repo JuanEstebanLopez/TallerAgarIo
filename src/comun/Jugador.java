@@ -24,6 +24,11 @@ public class Jugador extends Elemento {
 
 	public void setActivo(boolean activo) {
 		this.activo = activo;
+		if (!activo) {
+			y = -100;
+			x = -100;
+			d = 0;
+		}
 	}
 
 	public boolean isActivo() {

@@ -20,6 +20,9 @@ public class InterfazServidor extends JFrame {
 	private JuegoServidor juego;
 	private PanelRanking panelRanking;
 	private StopWatch reloj;
+	public boolean juegoIniciado;
+
+	private JButton btnIniciar;
 
 	public static void main(String[] args) {
 		REF = new InterfazServidor();
@@ -32,12 +35,13 @@ public class InterfazServidor extends JFrame {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("Agario");
 		setLayout(new BorderLayout());
+		juegoIniciado = false;
 		panelRanking = new PanelRanking();
 		juego = new JuegoServidor(this);
 		reloj = new StopWatch();
 		add(panelRanking, BorderLayout.EAST);
 		add(juego, BorderLayout.CENTER);
-		JButton btnIniciar = new JButton("Iniciar Juego");
+		btnIniciar = new JButton("Iniciar Juego");
 		btnIniciar.addActionListener(new ActionListener() {
 
 			@Override
@@ -47,6 +51,7 @@ public class InterfazServidor extends JFrame {
 			}
 		});
 		add(btnIniciar, BorderLayout.SOUTH);
+		btnIniciar.setEnabled(false);
 		pack();
 
 		try {
@@ -61,9 +66,9 @@ public class InterfazServidor extends JFrame {
 
 	}
 
-	public void TerminarPartida() {
+	public void TerminarPartida(boolean forzarFin) {
 		System.out.println(reloj.getElapsedTimeSecs());
-		if (reloj.getElapsedTimeSecs() == 300) {
+		if (forzarFin || reloj.getElapsedTimeSecs() >= 300) {
 			modelo.TerminarJuego(juego.TerminarJuego());
 
 		}
@@ -81,15 +86,32 @@ public class InterfazServidor extends JFrame {
 
 	}
 
+	public void puedeIniciar() {
+		btnIniciar.setEnabled(true);
+	}
+
+	public boolean juegoIniciado() {
+		return juegoIniciado;
+	}
+
 	public int agregarJugador(Jugador juga) {
 		return juego.agregarJugador(juga);
 	}
 
+	/**
+	 * Actualiza las coordenadas de los elementos del juego
+	 * 
+	 * @param jugadores
+	 *            String con la información de los jugadores
+	 * @param comida
+	 *            String con la información de la comida
+	 */
 	public void actualizarPosiciones(String jugadores, String comida) {
 		modelo.ActualizarClientes(jugadores, comida);
 	}
 
 	public void iniciarPartida() {
+		juegoIniciado = true;
 		modelo.IniciarJuego();
 		juego.IniciarJuego();
 	}

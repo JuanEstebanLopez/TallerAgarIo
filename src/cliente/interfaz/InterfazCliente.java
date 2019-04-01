@@ -33,8 +33,10 @@ public class InterfazCliente extends JFrame {
 	private JPasswordField txtPassword;
 	private JButton btnIniciar;
 	private JButton btnRegistrar;
+
+	private JPanel panelOpciones;
 	private Comunicacion comumincacion;
-	
+
 	private PanelRanking panelRanking;
 
 	private JuegoCliente juego;
@@ -55,16 +57,16 @@ public class InterfazCliente extends JFrame {
 		add(juego, BorderLayout.CENTER);
 		add(panelRanking, BorderLayout.EAST);
 
-		JPanel panelOpciones = new JPanel();
+		panelOpciones = new JPanel();
 		panelOpciones.setLayout(new GridLayout(1, 6));
 		TitledBorder border = BorderFactory.createTitledBorder("Datos del usuario");
 		border.setTitleColor(Color.BLUE);
 		panelOpciones.setBorder(border);
-		labNombre = new JLabel("             Digite su Nickname: ");
+		labNombre = new JLabel("             Digite su email: ");
 		txtNombre = new JTextField();
 		labPassword = new JLabel("                     Contraseña: ");
 		txtPassword = new JPasswordField();
-		
+
 		txtNombre.addKeyListener(new KeyListener() {
 
 			@Override
@@ -81,10 +83,10 @@ public class InterfazCliente extends JFrame {
 
 			}
 		});
-		
+
 		btnRegistrar = new JButton("Registrar");
 		btnRegistrar.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Conectar();
@@ -96,12 +98,13 @@ public class InterfazCliente extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				ActualizarNombre(txtNombre.getText());
-//				Conectar();
+				// ActualizarNombre(txtNombre.getText());
+				Conectar();
+				iniciarSesion();
 
 			}
 		});
-		
+
 		panelOpciones.add(labNombre);
 		panelOpciones.add(txtNombre);
 		panelOpciones.add(labPassword);
@@ -111,38 +114,46 @@ public class InterfazCliente extends JFrame {
 		add(panelOpciones, BorderLayout.SOUTH);
 
 		pack();
-		
-		try{
+
+		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}catch(Exception e){	
-			
+		} catch (Exception e) {
+
 		}
 	}
-	
+
 	public void iniciarSesion() {
 		String nombre = txtNombre.getText();
-		char[] password = txtPassword.getPassword();
+		String password = new String(txtPassword.getPassword());
+		comumincacion.tryEnviarMensaje(Comunicacion.INICIAR_SESION, nombre, password);
 	}
-	
+
 	public void registrarUsuario() {
 		String nombre = "";
 		String email = "";
 		String password = "";
-		while(nombre.equals("")) {
+		while (nombre.equals("")) {
 			nombre = JOptionPane.showInputDialog(this, "Digite el nombre de usuario");
 		}
-		if(!nombre.equals("")) {
-			while(email.equals("")) {
+		if (!nombre.equals("")) {
+			while (email.equals("")) {
 				email = JOptionPane.showInputDialog(this, "Digite su e-mail");
 			}
-			if(!email.equals("")) {
-				while(password.equals("")) {
+			if (!email.equals("")) {
+				while (password.equals("")) {
 					password = JOptionPane.showInputDialog(this, "Digite su contraseña");
 				}
-				System.out.println(Comunicacion.REGISTRAR+" "+nombre+" "+email+" "+password);
+				System.out.println(Comunicacion.REGISTRAR + " " + nombre + " " + email + " " + password);
 				comumincacion.tryEnviarMensaje(Comunicacion.REGISTRAR, nombre, email, password);
 			}
 		}
+	}
+
+	public void actualizarEstadoJuego(String mensaje) {
+		panelOpciones.removeAll();
+		panelOpciones.setLayout(new GridLayout(1, 1));
+		panelOpciones.add(new JLabel(mensaje));
+		pack();
 	}
 
 	@Override
@@ -166,7 +177,8 @@ public class InterfazCliente extends JFrame {
 	}
 
 	public void Conectar() {
-		comumincacion.crearComunicacion();
+		if (comumincacion.getState().equals(Thread.State.NEW))
+			comumincacion.crearComunicacion();
 	}
 
 	public void iniciarJuego() {
@@ -179,6 +191,26 @@ public class InterfazCliente extends JFrame {
 
 	public void actualizarJugadorIndex(int ind) {
 		juego.setJugadorIndex(ind);
+		actualizarEstadoJuego("Jugador " + (ind + 1) + ": " + comumincacion.getNombre());
+	}
+
+	public void ActualizarPuntaje(String puntajes) {
+		int i = juego.getJugadorIndex();
+		int p = 1;
+		String[] pts = puntajes.split(" ");
+		int pt = Integer.parseInt(pts[i]);
+		for (int j = 0; j < pts.length; j++) {
+			if (Integer.parseInt(pts[j]) > pt)
+				p++;
+		}
+		String men = "Partida teminada, " + comumincacion.getNombre() + ", puesto:" + p + " puntaje:" + pt;
+		actualizarEstadoJuego(men);
+		JOptionPane.showMessageDialog(null, men);
+
+	}
+
+	public void terminarJuego() {
+		juego.setJuegoActivo(false);
 	}
 
 	public void actualizarElementosJuego(String jugadores, String comida) {

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import javax.swing.JOptionPane;
+
 import cliente.modelo.Comunicacion;
 
 import comun.Elemento;
@@ -18,6 +20,8 @@ public class JuegoServidor extends PanelJuego {
 	public final static int MIN_COMIDA = 10;
 	public final static int MAX_COMIDA = 18;
 
+	public int jugadoresDescalificados = 0;
+
 	private ArrayList<Jugador> jugadores;
 	private LinkedList<Elemento> comida;
 	private InterfazServidor principal;
@@ -27,6 +31,7 @@ public class JuegoServidor extends PanelJuego {
 		this.principal = principal;
 		jugadores = new ArrayList<Jugador>(Modelo.CANT_JUGADORES);
 		comida = new LinkedList<Elemento>();
+		jugadoresDescalificados = 0;
 	}
 
 	public ArrayList<Color> colorear() {
@@ -114,7 +119,11 @@ public class JuegoServidor extends PanelJuego {
 	}
 
 	public void DescalificarJugador(Jugador juga) {
+		jugadoresDescalificados++;
 		juga.setActivo(false);
+		if (jugadoresDescalificados >= jugadores.size() - 1) {
+			principal.TerminarPartida(true);
+		}
 	}
 
 	public int agregarJugador(Jugador juga) {

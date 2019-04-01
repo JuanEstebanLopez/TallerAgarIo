@@ -96,6 +96,10 @@ public class JuegoCliente extends PanelJuego {
 		this.jugadorIndex = jugadorIndex;
 	}
 
+	public int getJugadorIndex() {
+		return jugadorIndex;
+	}
+
 	public void actualizarElementosJuego(String juga, String comida) {
 		this.jugadores = juga.split(Comunicacion.SEPARADOR);
 		this.comida = comida;
