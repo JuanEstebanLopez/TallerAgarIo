@@ -12,6 +12,9 @@ import comun.PanelJuego;
 
 public class JuegoCliente extends PanelJuego {
 
+	/**
+	 * Índice del jugador en la lista de jugadores. 
+	 */
 	private int jugadorIndex;
 	private int mx, my;
 	private InterfazCliente principal;
@@ -100,6 +103,11 @@ public class JuegoCliente extends PanelJuego {
 		return jugadorIndex;
 	}
 
+	/**
+	 * Actualiza los elementos del juego obtenidos del servidor
+	 * @param juga información de los jugadores
+	 * @param comida Información de la comida
+	 */
 	public void actualizarElementosJuego(String juga, String comida) {
 		this.jugadores = juga.split(Comunicacion.SEPARADOR);
 		this.comida = comida;

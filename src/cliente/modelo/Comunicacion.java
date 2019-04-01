@@ -111,7 +111,7 @@ public class Comunicacion extends Thread {
 		case FIN_PARTIDA:
 			this.conectado = false;
 			String puntajesFinales = nextLineServer();
-			interfaz.ActualizarPuntaje(puntajesFinales);
+			interfaz.actualizarPuntajeFinal(puntajesFinales);
 			System.out.println("Se ha terminado el juego.\n Puntajes: " + puntajesFinales);
 			interfaz.terminarJuego();
 			break;
@@ -128,6 +128,7 @@ public class Comunicacion extends Thread {
 		case START:
 			iniciarJuego();
 			String usuarios = nextLineServer();
+			interfaz.registrarUsuarios(usuarios.split(SEPARADOR_MIN));
 			break;
 
 		default:
@@ -172,10 +173,19 @@ public class Comunicacion extends Thread {
 		return enviado;
 	}
 
+	/**
+	 * Inicia el juego en la interfaz
+	 */
 	public void iniciarJuego() {
 		interfaz.iniciarJuego();
 	}
 
+	/**
+	 * Envía el mensaje paraa mover el jugador
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	public void moverJugador(int x, int y) {
 		try {
 			enviarMensaje(MOVER, x + SEPARADOR_MIN + y);

@@ -36,10 +36,25 @@ public class Modelo {
 		aceptarClientes();
 	}
 
+	/**
+	 * Recibe petición de registro de un usuario
+	 * 
+	 * @param nombre
+	 * @param email
+	 * @param password
+	 * @return
+	 */
 	public boolean registrar(String nombre, String email, String password) {
 		return baseDatos.registrarUsuario(nombre, email, password);
 	}
 
+	/**
+	 * Recibe petición de inicio de sesión de un usuario
+	 * 
+	 * @param nombre
+	 * @param password
+	 * @return
+	 */
 	public boolean iniciarSesion(String nombre, String password) {
 		return baseDatos.verificarInicioSesion(nombre, password);
 	}
@@ -60,6 +75,9 @@ public class Modelo {
 	// return rank;
 	// }
 
+	/**
+	 * Hilo que acepta nuevos jugadores.
+	 */
 	public void aceptarClientes() {
 		new Thread() {
 			@Override
@@ -86,6 +104,12 @@ public class Modelo {
 		}.start();
 	}
 
+	/**
+	 * Envía a los jugadores las actalizaciones de las posiciones en el juego.
+	 * 
+	 * @param jugadores
+	 * @param comida
+	 */
 	public void ActualizarClientes(String jugadores, String comida) {
 
 		for (int i = clientes.size() - 1; i >= 0; i--) {
@@ -100,7 +124,13 @@ public class Modelo {
 
 	}
 
-	public boolean IniciarJuego() {
+	/**
+	 * Inicia el juego y envía a los clientes los nombres de los usuarios
+	 * conectados.
+	 * 
+	 * @return
+	 */
+	public String IniciarJuego() {
 		boolean enviadoATodos = true;
 		StringBuilder usuarios = new StringBuilder();
 		for (Comunicacion comu : clientes) {
@@ -112,9 +142,14 @@ public class Modelo {
 				enviadoATodos &= comu.tryEnviarMensaje(Comunicacion.START, usrs);
 			}
 		}
-		return enviadoATodos;
+		return usrs;
 	}
 
+	/**
+	 * Envía a los jugadores la señal de juego finalizado y los puntajes finales.
+	 * 
+	 * @param mensaje
+	 */
 	public void TerminarJuego(String mensaje) {
 		for (int i = clientes.size() - 1; i >= 0; i--) {
 			Comunicacion comu = clientes.get(i);
@@ -123,6 +158,11 @@ public class Modelo {
 		}
 	}
 
+	/**
+	 * Agrega un nuevo cliente.
+	 * 
+	 * @param cliente
+	 */
 	public void agregarCliente(Comunicacion cliente) {
 		if (principal.juegoIniciado()) {
 			cliente.terminarConexion(JUEGO_INICIADO);

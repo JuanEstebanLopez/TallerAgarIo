@@ -31,10 +31,23 @@ public abstract class PanelJuego extends JPanel implements Runnable {
 		pintarJugadores(g);
 	}
 
+	/**
+	 * Pinta los elementos de comida del juego.
+	 * 
+	 * @param g
+	 */
 	public abstract void pintarComida(Graphics g);
 
+	/**
+	 * pinta los jugadores del juego.
+	 * 
+	 * @param g
+	 */
 	public abstract void pintarJugadores(Graphics g);
 
+	/**
+	 * Actualiza las posiciones y elementos del juego.
+	 */
 	public abstract void update();
 
 	public boolean isJuegoActivo() {

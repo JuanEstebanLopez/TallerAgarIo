@@ -100,6 +100,11 @@ public class JuegoServidor extends PanelJuego {
 		actualizarPosiciones();
 	}
 
+	/**
+	 * Termina el juego y retorna los puntajes.
+	 * 
+	 * @return puntajes separados por espacios.
+	 */
 	public String TerminarJuego() {
 		String puntajes = "";
 		for (int i = 0; i < jugadores.size(); i++) {
@@ -109,6 +114,9 @@ public class JuegoServidor extends PanelJuego {
 		return puntajes;
 	}
 
+	/**
+	 * Agrega más comida al juego.
+	 */
 	private void addComida() {
 		if (comida.size() < MIN_COMIDA) {
 			int add = (MIN_COMIDA - comida.size()) + (int) (Math.random() * (float) (MAX_COMIDA - MIN_COMIDA));
@@ -118,6 +126,11 @@ public class JuegoServidor extends PanelJuego {
 		}
 	}
 
+	/**
+	 * Descalifica un jugador y termina el juego cuando solo queda un jugador.
+	 * 
+	 * @param juga
+	 */
 	public void DescalificarJugador(Jugador juga) {
 		jugadoresDescalificados++;
 		juga.setActivo(false);
@@ -126,15 +139,27 @@ public class JuegoServidor extends PanelJuego {
 		}
 	}
 
+	/**
+	 * Agrega un jugador al juego.
+	 * 
+	 * @param juga
+	 * @return ïndice del jugador añadido.
+	 */
 	public int agregarJugador(Jugador juga) {
 		jugadores.add(juga);
 		return jugadores.size() - 1;
 	}
 
+	/**
+	 * Envía a los clientes las posiciones de los elementos.
+	 */
 	public void actualizarPosiciones() {
 		principal.actualizarPosiciones(listaJugadores(), listaComida());
 	}
 
+	/**
+	 * @return Información de los jugadores
+	 */
 	public String listaJugadores() {
 		StringBuilder str = new StringBuilder();
 		for (Jugador j : jugadores) {
@@ -152,6 +177,9 @@ public class JuegoServidor extends PanelJuego {
 		return str.toString();
 	}
 
+	/**
+	 * @return Información de la comida.
+	 */
 	public String listaComida() {
 		StringBuilder str = new StringBuilder();
 		for (Elemento c : comida) {

@@ -14,6 +14,12 @@ public class Jugador extends Elemento {
 		activo = true;
 	}
 
+	/**
+	 * Mueve el jugador en la dirección dada.
+	 * 
+	 * @param direx
+	 * @param direy
+	 */
 	public void move(float direx, float direy) {
 		if (!(direx > 0 && x >= PanelJuego.WIDTH - d) && !(direx < 0 && x <= 0))
 			x += direx / BASE_VEL;
@@ -35,6 +41,11 @@ public class Jugador extends Elemento {
 		return activo;
 	}
 
+	/**
+	 * Calcula el puntaje del jugador en base a su tamaño.
+	 * 
+	 * @return
+	 */
 	public int getPuntaje() {
 		return (int) ((d - BASE_DIAMETER) / INCREMENT);
 	}

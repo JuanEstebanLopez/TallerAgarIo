@@ -7,6 +7,10 @@ import java.net.Socket;
 
 import comun.Jugador;
 
+/**
+ * @author juane
+ *
+ */
 public class Comunicacion extends Thread {
 
 	public final static int SLEEP = 40;
@@ -154,18 +158,34 @@ public class Comunicacion extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Envía la señal de terminar partida a un jugador.
+	 * 
+	 * @param puntajes
+	 */
 	public void partidaTerminada(String puntajes) {
 		tryEnviarMensaje(FIN_PARTIDA, puntajes);
 		conectado = false;
 		principal.desconectarUsuario(this);
 	}
 
+	/**
+	 * Recibe del cliente la dirección hacia donde se mueve un jugador.
+	 * 
+	 * @param mov
+	 */
 	public void moverJugador(String mov) {
 		String[] m = mov.split(SEPARADOR_MIN);
 		juga.move(Integer.parseInt(m[0]), Integer.parseInt(m[1]));
 	}
 
+	/**
+	 * Envía al cliente las posiciones de los elementos del juego.
+	 * 
+	 * @param jugadores
+	 * @param comida
+	 */
 	public void actualizarPosiciones(String jugadores, String comida) {
 		try {
 			enviarMensaje(MOVER, jugadores, comida);

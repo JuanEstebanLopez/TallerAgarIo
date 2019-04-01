@@ -122,12 +122,18 @@ public class InterfazCliente extends JFrame {
 		}
 	}
 
+	/**
+	 * Envía ´peticion de inicio de sesión al servidor.
+	 */
 	public void iniciarSesion() {
 		String nombre = txtNombre.getText();
 		String password = new String(txtPassword.getPassword());
 		comumincacion.tryEnviarMensaje(Comunicacion.INICIAR_SESION, nombre, password);
 	}
 
+	/**
+	 * Envía peticion de registro al servidor
+	 */
 	public void registrarUsuario() {
 		String nombre = "";
 		String email = "";
@@ -149,6 +155,11 @@ public class InterfazCliente extends JFrame {
 		}
 	}
 
+	/**
+	 * Actualiza el mensaje de la parte inferior de la pantalla.
+	 * 
+	 * @param mensaje
+	 */
 	public void actualizarEstadoJuego(String mensaje) {
 		panelOpciones.removeAll();
 		panelOpciones.setLayout(new GridLayout(1, 1));
@@ -158,11 +169,14 @@ public class InterfazCliente extends JFrame {
 
 	@Override
 	public void dispose() {
-		JOptionPane.showMessageDialog(this, "Log Out");
+		// JOptionPane.showMessageDialog(this, "Log Out");
 		super.dispose();
 		System.exit(EXIT_ON_CLOSE);
 	}
 
+	/**
+	 * Inicia la comunicación con el servidor.
+	 */
 	public void iniciar() {
 		comumincacion = new Comunicacion(this);
 	}
@@ -176,25 +190,53 @@ public class InterfazCliente extends JFrame {
 		}
 	}
 
+	/**
+	 * Agrega los nombres de usuario al ranking.
+	 * 
+	 * @param usuarios
+	 */
+	public void registrarUsuarios(String[] usuarios) {
+		panelRanking.setNombres(usuarios);
+	}
+
 	public void Conectar() {
 		if (comumincacion.getState().equals(Thread.State.NEW))
 			comumincacion.crearComunicacion();
 	}
 
+	/**
+	 * inicia el juego
+	 */
 	public void iniciarJuego() {
 		juego.IniciarJuego();
 	}
 
+	/**
+	 * Envía la señal para mover al jugador
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	public void actualizarPosiciones(int x, int y) {
 		comumincacion.moverJugador(x, y);
 	}
 
+	/**
+	 * Actualiza el índice del jugador
+	 * 
+	 * @param ind
+	 */
 	public void actualizarJugadorIndex(int ind) {
 		juego.setJugadorIndex(ind);
 		actualizarEstadoJuego("Jugador " + (ind + 1) + ": " + comumincacion.getNombre());
 	}
 
-	public void ActualizarPuntaje(String puntajes) {
+	/**
+	 * Mensaje para el final de la partida.
+	 * 
+	 * @param puntajes
+	 */
+	public void actualizarPuntajeFinal(String puntajes) {
 		int i = juego.getJugadorIndex();
 		int p = 1;
 		String[] pts = puntajes.split(" ");
@@ -213,7 +255,15 @@ public class InterfazCliente extends JFrame {
 		juego.setJuegoActivo(false);
 	}
 
+	/**
+	 * Actualiza en la interfaz los elementos del juego.
+	 * 
+	 * @param jugadores
+	 * @param comida
+	 */
 	public void actualizarElementosJuego(String jugadores, String comida) {
 		juego.actualizarElementosJuego(jugadores, comida);
+		if (panelRanking.needUpdate())
+			panelRanking.mostrarPuntajes(jugadores.split(Comunicacion.SEPARADOR));
 	}
 }
