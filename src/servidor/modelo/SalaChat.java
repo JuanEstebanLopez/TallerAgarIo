@@ -75,7 +75,7 @@ public class SalaChat extends Thread {
 	}
 
 	public synchronized void initialPlayers(String players) {
-		String mensaje = LISTA_USUARIOS + SEPARADOR + "Usuario" + players;
+		String mensaje = LISTA_USUARIOS + SEPARADOR + players;
 		Iterator<UserChat> it = usuarios.iterator();
 		while (it.hasNext()) {
 			UserChat u = it.next();
