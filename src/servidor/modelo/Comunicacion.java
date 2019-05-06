@@ -7,16 +7,14 @@ import java.net.Socket;
 
 import comun.Jugador;
 
-/**
- * @author juane
- *
- */
+
 public class Comunicacion extends Thread {
 
 	public final static int SLEEP = 40;
 
 	public final static String SEPARADOR = ":";
 	public final static String SEPARADOR_MIN = " ";
+	public final static String SEPARADOR_MAX = ";";
 
 	public final static String REGISTRAR = "register";
 	public final static String REGISTO_FALLIDO = "register faild";

@@ -24,6 +24,9 @@ public class Modelo {
 	public boolean juegoIniciado;
 	public ArrayList<Comunicacion> clientes;
 
+	private StreamJuegoServidor streamJuego;
+	private StreamAudioServidor streamAudio;
+	private SalaChat salaChat;
 	private BaseDatos baseDatos;
 
 	public InterfazServidor principal;
@@ -34,6 +37,13 @@ public class Modelo {
 		clientes = new ArrayList<Comunicacion>(5);
 		baseDatos = new BaseDatos();
 		aceptarClientes();
+		streamJuego = new StreamJuegoServidor();
+		streamAudio = new StreamAudioServidor();
+		streamAudio.start();
+
+		salaChat = new SalaChat(this);
+		salaChat.aceptarClientes();
+
 	}
 
 	/**
@@ -111,7 +121,7 @@ public class Modelo {
 	 * @param comida
 	 */
 	public void ActualizarClientes(String jugadores, String comida) {
-
+		// Envía la información por TCP
 		for (int i = clientes.size() - 1; i >= 0; i--) {
 			Comunicacion comu = clientes.get(i);
 			if (comu.isConectado()) {
@@ -121,7 +131,27 @@ public class Modelo {
 					comu.terminarConexion("Has sido descalificado, has quedado de puesto: " + clientes.size());
 			}
 		}
+		// Envía la cadena por UDP
+		StringBuilder udpSTRB = new StringBuilder(jugadores.length() + comida.length() + 1);
+		boolean neddCorrection = jugadores.endsWith(":");
+		String udpSTR = neddCorrection ? jugadores.substring(0, jugadores.length() - 1) : jugadores;
+		udpSTRB.append(udpSTR).append(Comunicacion.SEPARADOR_MIN).append(Comunicacion.SEPARADOR_MAX);
+		neddCorrection = comida.endsWith(":");
+		udpSTR = neddCorrection ? comida.substring(0, comida.length() - 1) : comida;
+		udpSTRB.append(udpSTR).append(Comunicacion.SEPARADOR_MIN);
+		streamJuego.enviar(udpSTRB.toString());
+		// System.out.println("enviado: " + udpSTRB.toString());
+	}
 
+	/**
+	 * @return Lista de los nombres de los jugadores.
+	 */
+	public String getListaJugadores() {
+		StringBuilder usuarios = new StringBuilder();
+		for (Comunicacion comu : clientes) {
+			usuarios.append(comu.getNombre()).append(Comunicacion.SEPARADOR_MIN);
+		}
+		return usuarios.toString();
 	}
 
 	/**
@@ -132,16 +162,13 @@ public class Modelo {
 	 */
 	public String IniciarJuego() {
 		boolean enviadoATodos = true;
-		StringBuilder usuarios = new StringBuilder();
-		for (Comunicacion comu : clientes) {
-			usuarios.append(comu.getNombre()).append(Comunicacion.SEPARADOR_MIN);
-		}
-		String usrs = usuarios.toString();
+		String usrs = getListaJugadores();
 		for (Comunicacion comu : clientes) {
 			if (comu.isConectado()) {
 				enviadoATodos &= comu.tryEnviarMensaje(Comunicacion.START, usrs);
 			}
 		}
+		salaChat.initialPlayers(usrs);
 		return usrs;
 	}
 
@@ -178,6 +205,10 @@ public class Modelo {
 			}
 		} else
 			cliente.terminarConexion(SALA_LLENA);
+	}
+
+	public boolean isJuegoIniciado() {
+		return juegoIniciado;
 	}
 
 	public void desconectarUsuario(Comunicacion cliente) {

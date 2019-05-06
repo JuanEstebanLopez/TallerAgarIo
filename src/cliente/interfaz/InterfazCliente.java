@@ -2,6 +2,7 @@ package cliente.interfaz;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,11 +16,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
 import cliente.modelo.Comunicacion;
+import cliente.modelo.ManejoComunicacion;
 import comun.PanelRanking;
 
 public class InterfazCliente extends JFrame {
@@ -34,12 +38,21 @@ public class InterfazCliente extends JFrame {
 	private JButton btnIniciar;
 	private JButton btnRegistrar;
 
+	private JButton btnStream;
+
 	private JPanel panelOpciones;
 	private Comunicacion comumincacion;
+	private ManejoComunicacion manejoComunicacion;
 
 	private PanelRanking panelRanking;
 
 	private JuegoCliente juego;
+
+	private JTextField txtNombreChat;
+	private JTextField txtTextoChat;
+	private JButton btnChat;
+	private JTextArea txtChat;
+	private JPanel extraPanel;
 
 	public static void main(String[] args) {
 		REF = new InterfazCliente();
@@ -55,7 +68,11 @@ public class InterfazCliente extends JFrame {
 		panelRanking = new PanelRanking();
 		juego = new JuegoCliente(this);
 		add(juego, BorderLayout.CENTER);
-		add(panelRanking, BorderLayout.EAST);
+
+		extraPanel = new JPanel();
+		extraPanel.setLayout(new BorderLayout());
+		extraPanel.add(panelRanking, BorderLayout.WEST);
+		add(extraPanel, BorderLayout.EAST);
 
 		panelOpciones = new JPanel();
 		panelOpciones.setLayout(new GridLayout(1, 6));
@@ -111,6 +128,17 @@ public class InterfazCliente extends JFrame {
 		panelOpciones.add(txtPassword);
 		panelOpciones.add(btnIniciar);
 		panelOpciones.add(btnRegistrar);
+
+		btnStream = new JButton("ver Stream");
+		panelOpciones.add(btnStream);
+
+		btnStream.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cambiarAStream();
+			}
+		});
 		add(panelOpciones, BorderLayout.SOUTH);
 
 		pack();
@@ -179,6 +207,72 @@ public class InterfazCliente extends JFrame {
 	 */
 	public void iniciar() {
 		comumincacion = new Comunicacion(this);
+		manejoComunicacion = new ManejoComunicacion(this);
+	}
+
+	public void cambiarAStream() {
+		panelOpciones.removeAll();
+		((TitledBorder) panelOpciones.getBorder()).setTitle("");
+		panelOpciones.setLayout(new GridLayout(1, 1));
+		panelOpciones.add(new JLabel("Modo Stream"));
+
+		JPanel panelChat = new JPanel();
+		panelChat.setPreferredSize(new Dimension(200, 700));
+		panelChat.setLayout(new BorderLayout());
+		panelChat.setBorder(new TitledBorder("Chat"));
+
+		txtNombreChat = new JTextField();
+		panelChat.add(txtNombreChat, BorderLayout.NORTH);
+		txtChat = new JTextArea();
+		txtChat.setEditable(false);
+		JScrollPane scp = new JScrollPane(txtChat);
+		scp.setPreferredSize(new Dimension(200, 700));
+		scp.setAutoscrolls(true);
+		panelChat.add(scp, BorderLayout.CENTER);
+
+		JPanel panelTxtEnviar = new JPanel();
+		panelTxtEnviar.setLayout(new BorderLayout());
+
+		txtTextoChat = new JTextField();
+		panelTxtEnviar.add(txtTextoChat, BorderLayout.CENTER);
+
+		btnChat = new JButton("Enviar");
+		panelTxtEnviar.add(btnChat, BorderLayout.SOUTH);
+		btnChat.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				sendTextChat();
+
+			}
+		});
+		panelChat.add(panelTxtEnviar, BorderLayout.SOUTH);
+
+		extraPanel.add(panelChat, BorderLayout.CENTER);
+
+		pack();
+		comumincacion.finalizarConexion();
+		juego.IniciarJuego();
+		manejoComunicacion.iniciarStreamJuego();
+	}
+
+	public void sendTextChat() {
+		if (txtChat == null || txtTextoChat == null || txtNombreChat == null)
+			return;
+		String text = txtNombreChat.getText() + ": " + txtTextoChat.getText();
+		txtChat.append(text + "\n");
+		manejoComunicacion.sendChatMessage(text);
+		txtTextoChat.setText("");
+	}
+
+	public void addTextChat(String message) {
+		if (txtChat != null)
+			txtChat.append(message + "\n");
+	}
+
+	public void setNameChat(String name) {
+		if (txtNombreChat != null)
+			txtNombreChat.setText(name);
 	}
 
 	public void ActualizarNombre(String nom) {

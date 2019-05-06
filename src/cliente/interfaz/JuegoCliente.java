@@ -13,7 +13,7 @@ import comun.PanelJuego;
 public class JuegoCliente extends PanelJuego {
 
 	/**
-	 * Índice del jugador en la lista de jugadores. 
+	 * Índice del jugador en la lista de jugadores.
 	 */
 	private int jugadorIndex;
 	private int mx, my;
@@ -46,7 +46,7 @@ public class JuegoCliente extends PanelJuego {
 	}
 
 	public ArrayList<Color> colorear() {
-		ArrayList<Color> colores = new ArrayList();
+		ArrayList<Color> colores = new ArrayList<Color>();
 		colores.add(Color.BLUE);
 		colores.add(Color.RED);
 		colores.add(Color.CYAN);
@@ -61,7 +61,7 @@ public class JuegoCliente extends PanelJuego {
 
 	@Override
 	public void pintarComida(Graphics g) {
-		if (!"".equals(comida)) {
+		if (!"".equals(comida) && !"".equals(comida.trim())) {
 			String[] cs = comida.split(Comunicacion.SEPARADOR);
 			for (int i = 0; i < cs.length; i++) {
 				String[] cInfo = cs[i].split(Comunicacion.SEPARADOR_MIN);
@@ -92,7 +92,8 @@ public class JuegoCliente extends PanelJuego {
 
 	@Override
 	public void update() {
-		principal.actualizarPosiciones(mx, my);
+		if (jugadorIndex >= 0)
+			principal.actualizarPosiciones(mx, my);
 	}
 
 	public void setJugadorIndex(int jugadorIndex) {
@@ -105,8 +106,11 @@ public class JuegoCliente extends PanelJuego {
 
 	/**
 	 * Actualiza los elementos del juego obtenidos del servidor
-	 * @param juga información de los jugadores
-	 * @param comida Información de la comida
+	 * 
+	 * @param juga
+	 *            información de los jugadores
+	 * @param comida
+	 *            Información de la comida
 	 */
 	public void actualizarElementosJuego(String juga, String comida) {
 		this.jugadores = juga.split(Comunicacion.SEPARADOR);
@@ -116,6 +120,9 @@ public class JuegoCliente extends PanelJuego {
 			int d = Integer.parseInt(j[3]);
 			playerX = WIDTH / 2 - Integer.parseInt(j[1]) - d / 2;
 			playerY = HEIGHT / 2 - Integer.parseInt(j[2]) - d / 2;
+		} else {
+			playerX = 0;
+			playerY = 0;
 		}
 	}
 

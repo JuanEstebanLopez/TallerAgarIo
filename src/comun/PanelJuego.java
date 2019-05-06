@@ -15,13 +15,15 @@ public abstract class PanelJuego extends JPanel implements Runnable {
 	private boolean JuegoActivo;
 
 	public PanelJuego() {
-		JuegoActivo = true;
+		JuegoActivo = false;
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 	}
 
 	public void IniciarJuego() {
-		new Thread(this).start();
-
+		if (!JuegoActivo) {
+			JuegoActivo = true;
+			new Thread(this).start();
+		}
 	}
 
 	@Override

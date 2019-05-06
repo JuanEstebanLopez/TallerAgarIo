@@ -3,7 +3,6 @@ package comun;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -73,13 +72,13 @@ public class PanelRanking extends JPanel {
 		border.setTitleColor(Color.BLUE);
 		setBorder(border);
 		setLayout(new GridLayout(indices.length, 1));
-		System.out.println(nombres + ": " + Arrays.toString(nombres));
-		for (int i = 0; i < indices.length; i++) {
-			String nom = nombres[indices[i][1]];
-			System.out.println(Arrays.toString(indices[i]) + " " + nom);
-
-			add(new JLabel((i + 1) + ") " + nom + ": " + indices[i][0]));
-		}
+		// System.out.println(nombres + ": " + Arrays.toString(nombres));
+		if (nombres != null)
+			for (int i = 0; i < indices.length; i++) {
+				String nom = nombres[indices[i][1]];
+				// System.out.println(Arrays.toString(indices[i]) + " " + nom);
+				add(new JLabel((i + 1) + ") " + nom + ": " + indices[i][0]));
+			}
 		updateUI();
 		lastUpdate = System.currentTimeMillis();
 	}

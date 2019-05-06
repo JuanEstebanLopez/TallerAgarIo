@@ -16,6 +16,7 @@ public class Comunicacion extends Thread {
 
 	public final static String SEPARADOR = ":";
 	public final static String SEPARADOR_MIN = " ";
+	public final static String SEPARADOR_MAX = ";";
 
 	public final static String REGISTRAR = "register";
 	public final static String REGISTO_FALLIDO = "register faild";
@@ -31,7 +32,7 @@ public class Comunicacion extends Thread {
 
 	public final static int PUERTO = 8000;
 	public final static String IP_DEFAULT = "127.0.0.1";
-
+	public static String USED_IP = "127.0.0.1";
 	private Socket s;
 	private boolean conectado;
 
@@ -58,6 +59,7 @@ public class Comunicacion extends Thread {
 			System.setProperty("javax.net.ssl.trustStore", TRUSTTORE_LOCATION);
 			SSLSocketFactory sf = (SSLSocketFactory) SSLSocketFactory.getDefault();
 			s = sf.createSocket(ip, PUERTO);
+			USED_IP = ip;
 			sOut = new DataOutputStream(s.getOutputStream());
 
 			sIn = new DataInputStream(s.getInputStream());
@@ -202,5 +204,9 @@ public class Comunicacion extends Thread {
 
 	public String getNombre() {
 		return nombre;
+	}
+
+	public void finalizarConexion() {
+		conectado = false;
 	}
 }

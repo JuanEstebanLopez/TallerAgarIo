@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import javax.swing.JOptionPane;
-
 import cliente.modelo.Comunicacion;
-
 import comun.Elemento;
 import comun.Jugador;
 import comun.PanelJuego;
