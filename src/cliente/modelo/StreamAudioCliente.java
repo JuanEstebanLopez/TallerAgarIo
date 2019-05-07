@@ -1,6 +1,7 @@
 package cliente.modelo;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.DatagramPacket;
@@ -11,6 +12,7 @@ import java.net.SocketTimeoutException;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
@@ -63,6 +65,9 @@ public class StreamAudioCliente extends Thread {
 			ms.receive(dp);
 			try {
 				byte audioData[] = dp.getData();
+				// audioInputStream = AudioSystem.getAudioInputStream(new
+				// File("data/game.wav"));
+
 				InputStream byteInputStream = new ByteArrayInputStream(audioData);
 				AudioFormat audioFormat = getAudioFormat();
 				audioInputStream = new AudioInputStream(byteInputStream, audioFormat,
@@ -71,6 +76,7 @@ public class StreamAudioCliente extends Thread {
 
 				sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
 				sourceDataLine.open(audioFormat);
+				// System.out.println(audioFormat);
 				sourceDataLine.start();
 
 				playAudio();
@@ -87,7 +93,9 @@ public class StreamAudioCliente extends Thread {
 	}
 
 	private AudioFormat getAudioFormat() {
-		float sampleRate = 16000F;
+		// PCM_SIGNED 44100.0 Hz, 16 bit, mono, 2 bytes/frame, little-endian
+
+		float sampleRate = 44100.0F;
 		int sampleSizeInBits = 16;
 		int channels = 1;
 		boolean signed = true;
