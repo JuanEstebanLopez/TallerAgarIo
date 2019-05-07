@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.net.ssl.SSLServerSocketFactory;
-import javax.swing.JOptionPane;
 
 import comun.Jugador;
 import servidor.interfaz.InterfazServidor;

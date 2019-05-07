@@ -3,6 +3,9 @@ package servidor.interfaz;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -24,6 +27,9 @@ public class InterfazServidor extends JFrame {
 	public boolean juegoIniciado;
 
 	private JButton btnIniciar;
+
+	private Timer timerEsperaDeUsuarios;
+	private TimerTask taskEsperaDeUsuarios;
 
 	public static void main(String[] args) {
 		REF = new InterfazServidor();
@@ -49,6 +55,8 @@ public class InterfazServidor extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				iniciarPartida();
 				reloj.start();
+				if (timerEsperaDeUsuarios != null)
+					timerEsperaDeUsuarios.cancel();
 			}
 		});
 		add(btnIniciar, BorderLayout.SOUTH);
@@ -61,6 +69,35 @@ public class InterfazServidor extends JFrame {
 
 		}
 
+		taskEsperaDeUsuarios = new TimerTask() {
+			private int min = 2;
+			private int seg = 0;
+
+			@Override
+			public void run() {
+				seg--;
+				if (seg < 0) {
+					seg = 59;
+					min--;
+				}
+				updateTimeEsperaDeUsuarios(min, seg);
+			}
+		};
+
+		timerEsperaDeUsuarios = new Timer();
+		timerEsperaDeUsuarios.schedule(taskEsperaDeUsuarios, 1000, 1000);
+
+	}
+
+	public void updateTimeEsperaDeUsuarios(int min, int seg) {
+		if (min <= 0 && seg <= 0) {
+			iniciarPartida();
+			reloj.start();
+			timerEsperaDeUsuarios.cancel();
+		} else {
+			System.out.println("Partida inicia en " + min + ":" + seg);
+			btnIniciar.setText("Iniciar (" + min + ":" + seg + ")");
+		}
 	}
 
 	public void refrecarRanking() {
@@ -142,5 +179,6 @@ public class InterfazServidor extends JFrame {
 		String usrs = modelo.IniciarJuego();
 		juego.IniciarJuego();
 		panelRanking.setNombres(usrs.split(Comunicacion.SEPARADOR_MIN));
+		btnIniciar.setVisible(false);
 	}
 }
