@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
+    <style media="screen">
+      body {
+          margin: 0;
+          background: url(../images/fondo_animado2.gif);
+          background-size: cover;
+          background-attachment: fixed;
+      }
+
+      * {
+          box-sizing : border-box;
+      }
+
+      .contenedor {
+          width : 100%;
+          padding : 15px;
+      }
+
+      .formulario {
+          background: #ffffff;
+          margin : auto;
+          background: rgba(255, 255, 255, 0.8);
+          text-align : center;
+      }
+
+      h1 {
+          text-align : center;
+          color : #1a2537;
+          font-size : 40px;
+      }
+
+      input[type="text"], input[type="password"], input[type="email"], input[type="datetime-local"],
+      select, input[type="number"] {
+          font-size: 20px;
+          width: 82%;
+          padding: 10px;
+          border: none;
+      }
+
+      .input-contenedor {
+          margin-bottom : 15px;
+          border : 1px solid #aaa;
+      }
+
+      .icon {
+          min-width : 50px;
+          text-align : center;
+          color : #999;
+      }
+
+      .button {
+          border: none;
+          width: 100%;
+          color: white;
+          font-size: 20px;
+          background: #1a2537;
+          padding : 15px 20px;
+          border-radius : 5px;
+          cursor : pointer;
+      }
+
+      .button:hover {
+          background : cadetblue;
+      }
+
+      p {
+          text-align : center;
+      }
+
+      .link {
+          text-decoration: none;
+          color: #1a2537;
+          font-weight : 600;
+      }
+
+      .link:hover {
+          color : cadetblue;
+      }
+
+      @media(min-width:768px){
+          .formulario {
+              margin : auto;
+              width : 500px;
+              margin-top : 150px;
+              border-radius : 2%;
+          }
+      }
+    </style>
+
+</head>
+<body>
+    <form method="post" class="formulario">
+        <h1>Login</h1>
+        <div class="contenedor">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="input-contenedor">
+                <i class="fas fa-user icon"></i>
+                <input placeholder="Username" type="text" required />
+            </div>
+            <div class="input-contenedor">
+                <i class="fas fa-key icon"></i>
+                <input placeholder="password" type="password" required />
+            </div>
+            <input type="submit" value="Send" class="button" />
+        </div>
+    </form>
+</body>
+</html>

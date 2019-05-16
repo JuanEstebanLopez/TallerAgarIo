@@ -26,14 +26,10 @@ public class ClientHandlerHack1 implements Runnable{
 	public void handleRequest(Socket socket)
 	{
 		try {
-			
-			
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			String headerLine = in.readLine();
 			if(headerLine!=null)
 			{
-				
-			
 				System.out.println(headerLine);
 				// A tokenizer is a process that splits text into a series of tokens
 				StringTokenizer tokenizer =  new StringTokenizer(headerLine);
@@ -50,7 +46,7 @@ public class ClientHandlerHack1 implements Runnable{
 					{
 						StringBuilder responseBuffer =  new StringBuilder();
 						String str="";
-						BufferedReader buf = new BufferedReader(new FileReader(System.getProperty("user.dir") +"/src/web/templates/javascr.html"));
+						BufferedReader buf = new BufferedReader(new FileReader(System.getProperty("user.dir") +"/src/web/templates/index.html"));
 						
 						while ((str = buf.readLine()) != null) {
 							responseBuffer.append(str);
