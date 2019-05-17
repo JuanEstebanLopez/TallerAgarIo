@@ -73,7 +73,7 @@ public class StreamAudioServidor extends Thread {
 				int count = au.read(audioBuffer, 0, audioBuffer.length);
 				// System.out.println(count);
 				if (count > 0) {
-					sourceDataLine.write(audioBuffer, 0, count);
+					// sourceDataLine.write(audioBuffer, 0, count);
 					DatagramPacket packet = new DatagramPacket(audioBuffer, count, grupo, PORT);
 					ms.send(packet);
 

@@ -8,12 +8,17 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
+import comun.Jugador;
+
 public class BaseDatos implements Serializable {
 	public final static String BD = "bd/datos.txt";
+	public final static String REGISTRO = "bd/registros.txt";
 	private HashMap<String, UsuarioRegistrado> datos;
+	private LinkedList<RegistroPartida> registrosPartidas;
 
 	public BaseDatos() {
 		leer();
@@ -127,6 +132,146 @@ public class BaseDatos implements Serializable {
 
 		public void setPassword(String password) {
 			this.password = password;
+		}
+
+	}
+
+	public LinkedList<RegistroPartida> getRegistros(String user) {
+		LinkedList<RegistroPartida> registros = new LinkedList<RegistroPartida>();
+
+		return registros;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void leerRegistros() {
+		try {
+			ObjectInputStream br = new ObjectInputStream(new FileInputStream(REGISTRO));
+			registrosPartidas = (LinkedList<RegistroPartida>) br.readObject();
+			br.close();
+		} catch (FileNotFoundException e) {
+			registrosPartidas = new LinkedList<RegistroPartida>();
+			guardar();
+			leer();
+			e.printStackTrace();
+		} catch (IOException s) {
+			s.printStackTrace();
+		} catch (ClassNotFoundException m) {
+			m.printStackTrace();
+		}
+		System.out.println(registrosPartidas);
+	}
+
+	public boolean guardarRegistro() {
+		try {
+			System.out.println(registrosPartidas);
+			ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(REGISTRO, false));
+			salida.writeObject(registrosPartidas);
+			salida.flush();
+			salida.close();
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public void registrarPartida(String fecha, long tiempoTranscurrido, Jugador[] jugadores) {
+		leerRegistros();
+		RegistroPartida reg = new RegistroPartida(fecha, tiempoTranscurrido, jugadores);
+		registrosPartidas.add(reg);
+		guardarRegistro();
+
+	}
+
+	public class RegistroPartida implements Serializable {
+		private HashMap<String, RegistroJugador> jugadores;
+		private String fecha;
+		private long tiempoTranscurrido;
+
+		public RegistroPartida(String fecha, long tiempoTranscurrido, Jugador[] jugador) {
+
+			this.jugadores = new HashMap<String, RegistroJugador>(5);
+
+			for (int i = 0; i < jugador.length; i++) {
+				Jugador j = jugador[i];
+				RegistroJugador juga = new RegistroJugador(j.getAlimentosConsumidos(), j.getPuntaje(),
+						j.getPuntajeTotal(), j.isGanador());
+				jugadores.put(j.getNombre(), juga);
+			}
+
+			this.fecha = fecha;
+			this.tiempoTranscurrido = tiempoTranscurrido;
+		}
+
+		public boolean contieneJugador(String juga) {
+			return jugadores.keySet().contains(juga);
+		}
+
+		public HashMap<String, RegistroJugador> getJugadores() {
+			return jugadores;
+		}
+
+		public String getFecha() {
+			return fecha;
+		}
+
+		public void setFecha(String fecha) {
+			this.fecha = fecha;
+		}
+
+		public long getTiempoTranscurrido() {
+			return tiempoTranscurrido;
+		}
+
+		public void setTiempoTranscurrido(long tiempoTranscurrido) {
+			this.tiempoTranscurrido = tiempoTranscurrido;
+		}
+
+	}
+
+	public class RegistroJugador implements Serializable {
+		private int alimentosDigeridos;
+		private int score;
+		private int positiveScore;
+		private boolean gano;
+
+		public RegistroJugador(int alimentosDigeridos, int score, int positiveScore, boolean gano) {
+			this.alimentosDigeridos = alimentosDigeridos;
+			this.score = score;
+			this.positiveScore = positiveScore;
+			this.gano = gano;
+		}
+
+		public int getAlimentosDigeridos() {
+			return alimentosDigeridos;
+		}
+
+		public void setAlimentosDigeridos(int alimentosDigeridos) {
+			this.alimentosDigeridos = alimentosDigeridos;
+		}
+
+		public int getScore() {
+			return score;
+		}
+
+		public void setScore(int score) {
+			this.score = score;
+		}
+
+		public int getPositiveScore() {
+			return positiveScore;
+		}
+
+		public void setPositiveScore(int positiveScore) {
+			this.positiveScore = positiveScore;
+		}
+
+		public boolean isGano() {
+			return gano;
+		}
+
+		public void setGano(boolean gano) {
+			this.gano = gano;
 		}
 
 	}

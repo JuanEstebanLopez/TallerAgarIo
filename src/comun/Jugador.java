@@ -8,10 +8,21 @@ public class Jugador extends Elemento {
 
 	private boolean activo;
 	private int puntaje;
+	private String nombre;
+
+	private int alimentosConsumidos;
+
+	private boolean ganador;
+	private int puesto;
 
 	public Jugador() {
 		super(BASE_DIAMETER);
 		activo = true;
+		alimentosConsumidos = 0;
+		puntaje = 0;
+
+		ganador = false;
+		puesto = 5;
 	}
 
 	/**
@@ -48,6 +59,52 @@ public class Jugador extends Elemento {
 	 */
 	public int getPuntaje() {
 		return (int) ((d - BASE_DIAMETER) / INCREMENT);
+	}
+
+	public void comer(boolean isComida) {
+		puntaje += INCREMENT;
+		if (isComida)
+			alimentosConsumidos++;
+	}
+
+	public int getAlimentosConsumidos() {
+		return alimentosConsumidos;
+	}
+
+	public void setAlimentosConsumidos(int alimentosConsumidos) {
+		this.alimentosConsumidos = alimentosConsumidos;
+	}
+
+	public void setPuntajeTotal(int puntaje) {
+		this.puntaje = puntaje;
+	}
+
+	public int getPuntajeTotal() {
+		return puntaje;
+	}
+
+	public boolean isGanador() {
+		return ganador;
+	}
+
+	public void setGanador(boolean ganador) {
+		this.ganador = ganador;
+	}
+
+	public int getPuesto() {
+		return puesto;
+	}
+
+	public void setPuesto(int puesto) {
+		this.puesto = puesto;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 }

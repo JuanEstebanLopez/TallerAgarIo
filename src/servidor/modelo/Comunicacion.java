@@ -7,7 +7,6 @@ import java.net.Socket;
 
 import comun.Jugador;
 
-
 public class Comunicacion extends Thread {
 
 	public final static int SLEEP = 40;
@@ -195,6 +194,8 @@ public class Comunicacion extends Thread {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 		principal.agregarCliente(this);
+		if (this.juga != null)
+			this.juga.setNombre(nombre);
 	}
 
 	public String getNombre() {
@@ -203,6 +204,8 @@ public class Comunicacion extends Thread {
 
 	public void setJuga(Jugador juga) {
 		this.juga = juga;
+		if (!this.nombre.equals(""))
+			this.juga.setNombre(this.nombre);
 	}
 
 	public Jugador getJuga() {

@@ -75,12 +75,14 @@ public class JuegoServidor extends PanelJuego {
 					Elemento co = c.next();
 					if (juga.collisionWhith(co) > 0) {
 						juga.setD(juga.getD() + Jugador.INCREMENT);
+						juga.comer(true);
 						c.remove();
 					}
 				}
 				for (Jugador opo : jugadores) {
 					if (juga != opo && opo.isActivo() && juga.collisionWhith(opo) > 0) {
 						juga.setD(juga.getD() + Jugador.INCREMENT);
+						juga.comer(false);
 						opo.setD(opo.getD() - Jugador.INCREMENT);
 					}
 				}

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
@@ -24,10 +25,15 @@ public class Modelo {
 
 	private StreamJuegoServidor streamJuego;
 	private StreamAudioServidor streamAudio;
+	private WebServer web;
+
 	private SalaChat salaChat;
 	private BaseDatos baseDatos;
 
 	public InterfazServidor principal;
+
+	public long initialTime;
+	public long finalTime;
 
 	public Modelo(InterfazServidor principal) {
 		this.principal = principal;
@@ -42,6 +48,8 @@ public class Modelo {
 		salaChat = new SalaChat(this);
 		salaChat.aceptarClientes();
 
+		web = new WebServer();
+		web.runServer();
 	}
 
 	/**
@@ -159,6 +167,7 @@ public class Modelo {
 	 * @return
 	 */
 	public String IniciarJuego() {
+		initialTime = System.currentTimeMillis();
 		boolean enviadoATodos = true;
 		String usrs = getListaJugadores();
 		for (Comunicacion comu : clientes) {
@@ -181,6 +190,30 @@ public class Modelo {
 			comu.partidaTerminada(mensaje);
 
 		}
+
+		// TODO
+
+		finalTime = System.currentTimeMillis();
+
+		long total = finalTime - initialTime;
+		Jugador[] jugas = new Jugador[clientes.size()];
+
+		int max = Integer.MIN_VALUE;
+		for (int i = 0; i < jugas.length; i++) {
+			Jugador jd = clientes.get(i).getJuga();
+			jugas[i] = jd;
+			if (jd.getPuntaje() > max)
+				;
+			max = jd.getPuntaje();
+		}
+		for (int i = 0; i < jugas.length; i++) {
+			if (jugas[i].getPuntaje() >= max)
+				jugas[i].setGanador(true);
+		}
+
+		Date dt = new Date();
+
+		baseDatos.registrarPartida(fecha, total, jugas);
 	}
 
 	/**
